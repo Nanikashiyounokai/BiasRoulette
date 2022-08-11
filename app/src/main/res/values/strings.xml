@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">偏りルーレット</string>
     <string name="todo">TODO</string>
+    <string name="btn4">ルーレット一覧へ</string>
 </resources>
