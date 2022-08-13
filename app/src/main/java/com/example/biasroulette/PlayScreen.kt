@@ -15,11 +15,12 @@ class PlayScreen : AppCompatActivity() {
 
         //広告の表示
         MobileAds.initialize(this) {}
-        val adView = findViewById<AdView>(R.id.adView)
+        val adView = findViewById<AdView>(R.id.playScreenAdView)
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
 
-        val btnRouletteList = findViewById<Button>(R.id.button4)
+        //変数宣言
+        val btnRouletteList = findViewById<Button>(R.id.btnRouletteList2)
 
         //クリック処理
         btnRouletteList.setOnClickListener {

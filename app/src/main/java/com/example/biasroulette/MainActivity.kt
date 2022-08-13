@@ -15,14 +15,14 @@ class MainActivity : AppCompatActivity() {
 
         //広告の表示
         MobileAds.initialize(this) {}
-        val adView = findViewById<AdView>(R.id.adView)
+        val adView = findViewById<AdView>(R.id.mainAdView)
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
 
         //変数宣言
-        val btnNewRoulette = findViewById<Button>(R.id.button)
-        val btnRouletteList = findViewById<Button>(R.id.button2)
-        val btnDetail = findViewById<Button>(R.id.button3)
+        val btnNewRoulette = findViewById<Button>(R.id.btnNewRoulette)
+        val btnRouletteList1 = findViewById<Button>(R.id.btnRouletteList1)
+        val btnDetail = findViewById<Button>(R.id.btnDetail)
 
         //クリック処理
         btnNewRoulette.setOnClickListener {
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
 
-        btnRouletteList.setOnClickListener {
+        btnRouletteList1.setOnClickListener {
             intent = Intent(this, RouletteList::class.java)
             startActivity(intent)
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)

@@ -13,7 +13,7 @@ class Detail : AppCompatActivity() {
 
         //広告の表示
         MobileAds.initialize(this) {}
-        val adView = findViewById<AdView>(R.id.adView)
+        val adView = findViewById<AdView>(R.id.detailAdView)
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
     }
