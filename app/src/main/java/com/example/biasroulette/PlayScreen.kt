@@ -8,10 +8,10 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 
-class MainActivity : AppCompatActivity() {
+class PlayScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_play_screen)
 
         //広告の表示
         MobileAds.initialize(this) {}
@@ -19,30 +19,13 @@ class MainActivity : AppCompatActivity() {
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
 
-        //変数宣言
-        val btnNewRoulette = findViewById<Button>(R.id.button)
-        val btnRouletteList = findViewById<Button>(R.id.button2)
-        val btnDetail = findViewById<Button>(R.id.button3)
+        val btnRouletteList = findViewById<Button>(R.id.button4)
 
         //クリック処理
-        btnNewRoulette.setOnClickListener {
-            intent = Intent(this, NewRoulette::class.java)
-            startActivity(intent)
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }
-
         btnRouletteList.setOnClickListener {
             intent = Intent(this, RouletteList::class.java)
             startActivity(intent)
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
-
-        btnDetail.setOnClickListener {
-            intent = Intent(this, Detail::class.java)
-            startActivity(intent)
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }
-
-
     }
 }
