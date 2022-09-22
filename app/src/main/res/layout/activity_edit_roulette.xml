@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewRoulette">
-
+    tools:context=".EditRouletteActivity">
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
@@ -36,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="新規ルーレット作成"
+        android:text="ルーレットの編集"
         android:textColor="#000000"
         android:textSize="34sp"
         android:textStyle="bold"
@@ -46,12 +45,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/roulette_name_et"
+        android:id="@+id/EDroulette_name_et"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:ems="10"
-        android:hint="新規ルーレットの名前を入力"
+        android:hint="ルーレットの名前を入力"
         android:inputType="textPersonName"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,21 +59,21 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/finish_btn"
+        android:id="@+id/EDupdate_btn"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/frame_style"
-        android:text="完成"
+        android:text="更新"
         android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comp_name_et" />
+        app:layout_constraintTop_toBottomOf="@+id/EDcomp_name_et" />
 
     <Button
-        android:id="@+id/ad_comp_btn"
+        android:id="@+id/EDad_comp_btn"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -131,7 +130,7 @@
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roulette_name_et" />
+        app:layout_constraintTop_toBottomOf="@+id/EDroulette_name_et" />
 
     <TextView
         android:id="@+id/textView3"
@@ -143,10 +142,10 @@
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roulette_name_et" />
+        app:layout_constraintTop_toBottomOf="@+id/EDroulette_name_et" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/comp_rv"
+        android:id="@+id/EDcomp_rv"
         android:layout_width="390dp"
         android:layout_height="240dp"
         android:layout_marginTop="0dp"
@@ -159,7 +158,7 @@
         tools:listitem="@layout/comp_layout2" />
 
     <EditText
-        android:id="@+id/comp_name_et"
+        android:id="@+id/EDcomp_name_et"
         android:layout_width="180dp"
         android:layout_height="60dp"
         android:layout_marginStart="22dp"
@@ -173,7 +172,7 @@
         app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
     <EditText
-        android:id="@+id/comp_num1_et"
+        android:id="@+id/EDcomp_num1_et"
         android:layout_width="50dp"
         android:layout_height="60dp"
         android:layout_marginStart="16dp"
@@ -184,11 +183,11 @@
         android:inputType="number"
         android:textSize="12sp"
         android:gravity="center"
-        app:layout_constraintStart_toEndOf="@+id/comp_name_et"
+        app:layout_constraintStart_toEndOf="@+id/EDcomp_name_et"
         app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
     <EditText
-        android:id="@+id/comp_num2_et"
+        android:id="@+id/EDcomp_num2_et"
         android:layout_width="50dp"
         android:layout_height="60dp"
         android:layout_marginStart="16dp"
@@ -199,7 +198,7 @@
         android:gravity="center"
         android:inputType="number"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/comp_num1_et"
+        app:layout_constraintStart_toEndOf="@+id/EDcomp_num1_et"
         app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
