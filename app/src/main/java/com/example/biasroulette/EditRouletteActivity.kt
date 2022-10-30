@@ -15,7 +15,8 @@ class EditRouletteActivity : AppCompatActivity() {
     private lateinit var realm: Realm
 
     private var addList = ArrayList<CompData>() //空のリストを用意<型はデータクラス>
-    private var recyclerAdapter = CompDateAdapter(addList)
+    private var addList2 = ArrayList<CompData2_2>()
+    private var recyclerAdapter = CompDateAdapter(addList, addList2)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,9 +104,6 @@ class EditRouletteActivity : AppCompatActivity() {
             }
 
         }
-
-
-
 
 
     }

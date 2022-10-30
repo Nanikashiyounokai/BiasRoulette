@@ -27,16 +27,6 @@ class RouletteNameAdapter (data: OrderedRealmCollection<RouletteName>, ) :
         val roulette_delete_btn: Button = cell.findViewById(R.id.roulette_delete_btn)
         val roulette_edit_btn: Button = cell.findViewById(R.id.roulette_edit_btn)
 
-//        init {
-//            //編集ボタンが押されたときの処理
-//            roulette_edit_btn.setOnClickListener {
-//                var context = cell.context
-//                val position:Int = adapterPosition
-//                context.startActivity(Intent(context, EditRouletteActivity::class.java)
-//                    .putExtra("ROULETTO_NAME", data[position].toString()))
-//            }
-//        }
-
     }
 
 

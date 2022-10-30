@@ -1,13 +1,16 @@
 package com.example.biasroulette
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import io.realm.Realm
+import io.realm.kotlin.where
 
-class CompDateAdapter(private val compDateList: ArrayList<CompData>) :RecyclerView.Adapter<CompDateAdapter.ViewHolderItem>() {
+class CompDateAdapter(private val compDateList: ArrayList<CompData>, private val compDateList2: ArrayList<CompData2_2>) :RecyclerView.Adapter<CompDateAdapter.ViewHolderItem>() {
 
     //ViewHolder(インナークラス)
     inner class ViewHolderItem(v:View, rAdapter: CompDateAdapter) :RecyclerView.ViewHolder(v) {
@@ -16,12 +19,13 @@ class CompDateAdapter(private val compDateList: ArrayList<CompData>) :RecyclerVi
         val comp_num2_holder : TextView = v.findViewById(R.id.comp_num2)
         val delete_btn : Button = v.findViewById(R.id.delete_btn)
 
-        //デリートボタンが押されたら
         init {
+            //デリートボタンが押されたら
             delete_btn.setOnClickListener {
                 val position:Int = adapterPosition
                 val listPosition = compDateList[position]
                 compDateList.removeAt(position)
+                compDateList2.removeAt(position)
                 rAdapter.notifyItemRemoved(position)
 
             }
@@ -38,7 +42,9 @@ class CompDateAdapter(private val compDateList: ArrayList<CompData>) :RecyclerVi
 
     //position番目のデータをレイアウト(xml)に表示するようにセット
     override fun onBindViewHolder(holder: ViewHolderItem, position: Int) {
+
         val currentItem = compDateList[position] //何番目のリスト(アイテム)ですか
+
         holder.comp_name_holder.text = currentItem.comp_name
         holder.comp_num1_holder.text = currentItem.comp_num1
         holder.comp_num2_holder.text = currentItem.comp_num2
