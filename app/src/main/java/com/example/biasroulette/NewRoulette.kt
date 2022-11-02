@@ -158,6 +158,7 @@ class NewRoulette : AppCompatActivity() {
         finish_btn.setOnClickListener {
             val roulette_name_et = findViewById<EditText>(R.id.roulette_name_et)
             var comp_count = addList.size
+            //ルーレットの名前被りをなくすために、DBから全てのルーレット名を検索
             val roulettes = realm.where<RouletteName>().findAll()
             var roulette_names = ArrayList<String>()
             for (roulette in roulettes){
