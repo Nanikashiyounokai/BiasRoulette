@@ -30,6 +30,11 @@ class PlayScreen : AppCompatActivity() {
         val rouletteName = findViewById<TextView>(R.id.rouletteName)
         val resultText = findViewById<TextView>(R.id.resultText)
 
+        //rouletteNameを遷移前「RouletteList」から引っ張ってくる。
+        val In_rouletteName = intent.getStringExtra("ROULETTO_NAME")
+        //定義したIn_rouletteNameをplay画面のrouletteNameという変数に代入。
+        rouletteName.setText(In_rouletteName)
+
 //        止まるボタンの無効化
         btnStop.isEnabled = false
 

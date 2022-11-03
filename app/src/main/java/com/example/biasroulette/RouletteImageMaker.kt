@@ -9,15 +9,40 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
+import io.realm.Realm
+import io.realm.kotlin.where
 import java.io.ByteArrayOutputStream
 import kotlin.properties.Delegates
 
 class RouletteImageMaker : AppCompatActivity() {
-
+    private lateinit var realm: Realm
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //===ここから浦部作業部分(20221103)
+        // 1) xmlとの紐付け
+        setContentView(R.layout.activity_edit_roulette)
+
+        // 2) rouletteNameを遷移前「RouletteList」から引っ張ってくる。
+        val In_rouletteName = intent.getStringExtra("ROULETTO_NAME")
+
+        // 3) ルーレット名が「In_rouletteName」である項目を検索
+        val comp_name_list = arrayListOf<String>() //項目名が格納されるlist
+        val comp_num1_list = arrayListOf<Int>() //表比率が格納されるlist
+        val comp_num2_list = arrayListOf<Int>() //裏比率が格納されるlist
+        val roulettes = realm.where<Roulette>().equalTo("name", In_rouletteName).findAll()
+        for (roulette in roulettes){
+            val comp_name  = roulette.comp_name
+            val comp_num1  = roulette.comp_num1
+            val comp_num2  = roulette.comp_num2
+            comp_name_list.add(comp_name)
+            comp_num1_list.add(comp_num1)
+            comp_num2_list.add(comp_num2)
+        }
+
+        //===
 
         val r1 = intent.getStringExtra("ratio1")
         val r2 = intent.getStringExtra("ratio2")
