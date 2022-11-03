@@ -52,36 +52,22 @@ class PlayScreen : AppCompatActivity() {
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
 
-//        通常回転系
-        val animSet0 = AnimationSet(true)
-        animSet0.interpolator = DecelerateInterpolator()
-        animSet0.fillAfter = true
-        animSet0.isFillEnabled = true
-        val animRotate0 = RotateAnimation(
-            0.0f, -600000.0f,
-            RotateAnimation.RELATIVE_TO_SELF, 0.5f,
-            RotateAnimation.RELATIVE_TO_SELF, 0.5f
-        )
-        animRotate0.duration = 250000
-        animRotate0.fillAfter = true
-        animSet0.addAnimation(animRotate0)
-
-//        停止回転系
-        val animSet1 = AnimationSet(true)
-        animSet1.interpolator = DecelerateInterpolator()
-        animSet1.fillAfter = true
-        animSet1.isFillEnabled = true
-        val animRotate1 = RotateAnimation(
-            0.0f, -3600.0f,
-            RotateAnimation.RELATIVE_TO_SELF, 0.5f,
-            RotateAnimation.RELATIVE_TO_SELF, 0.5f
-        )
-        animRotate1.duration = 2500
-        animRotate1.fillAfter = true
-        animSet1.addAnimation(animRotate1)
-
 //        回すボタン
         btnRotate.setOnClickListener {
+            //        通常回転系の定義
+            val animSet0 = AnimationSet(true)
+            animSet0.interpolator = DecelerateInterpolator()
+            animSet0.fillAfter = true
+            animSet0.isFillEnabled = true
+            val animRotate0 = RotateAnimation(
+                0.0f, -600000.0f,
+                RotateAnimation.RELATIVE_TO_SELF, 0.5f,
+                RotateAnimation.RELATIVE_TO_SELF, 0.5f
+            )
+            animRotate0.duration = 250000
+            animRotate0.fillAfter = true
+            animSet0.addAnimation(animRotate0)
+
             binding.imageView2.startAnimation(animSet0)
             btnRotate.isEnabled = false
             btnStop.isEnabled = true
@@ -94,6 +80,20 @@ class PlayScreen : AppCompatActivity() {
 
 //        止めるボタン
         btnStop.setOnClickListener {
+            //        停止回転系
+            val animSet1 = AnimationSet(true)
+            animSet1.interpolator = DecelerateInterpolator()
+            animSet1.fillAfter = true
+            animSet1.isFillEnabled = true
+            val animRotate1 = RotateAnimation(
+                0.0f, -3600.0f,
+                RotateAnimation.RELATIVE_TO_SELF, 0.5f,
+                RotateAnimation.RELATIVE_TO_SELF, 0.5f
+            )
+            animRotate1.duration = 2500
+            animRotate1.fillAfter = true
+            animSet1.addAnimation(animRotate1)
+
             binding.imageView2.startAnimation(animSet1)
             btnRotate.isEnabled = true
             btnStop.isEnabled = false
