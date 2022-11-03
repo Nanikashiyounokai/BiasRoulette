@@ -24,6 +24,7 @@ class RouletteNameAdapter (data: OrderedRealmCollection<RouletteName>, ) :
 
     class ViewHolder(cell: View) : RecyclerView.ViewHolder(cell) {
         val name: TextView = cell.findViewById(R.id.name_tv)
+        val roulette_play_btn: Button = cell.findViewById(R.id.roulette_play_btn)
         val roulette_delete_btn: Button = cell.findViewById(R.id.roulette_delete_btn)
         val roulette_edit_btn: Button = cell.findViewById(R.id.roulette_edit_btn)
 
@@ -65,6 +66,13 @@ class RouletteNameAdapter (data: OrderedRealmCollection<RouletteName>, ) :
         holder.roulette_edit_btn.setOnClickListener {
             val context = holder.itemView.context
             context.startActivity(Intent(context, EditRouletteActivity::class.java)
+                .putExtra("ROULETTO_NAME", roulette_name?.name.toString()))
+        }
+
+        //Playボタンが押されたときの処理
+        holder.roulette_play_btn.setOnClickListener {
+            val context = holder.itemView.context
+            context.startActivity(Intent(context, PlayScreen::class.java)
                 .putExtra("ROULETTO_NAME", roulette_name?.name.toString()))
         }
     }
