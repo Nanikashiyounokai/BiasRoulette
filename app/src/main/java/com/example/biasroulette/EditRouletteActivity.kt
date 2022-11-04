@@ -32,7 +32,7 @@ class EditRouletteActivity : AppCompatActivity() {
         realm = Realm.getDefaultInstance()
         setContentView(R.layout.activity_edit_roulette)
 
-        val roulette_name = intent.getStringExtra("ROULETTO_NAME")
+        val roulette_name = intent.getStringExtra("ROULETTE_NAME")
         val EDroulette_name_et: EditText = findViewById(R.id.EDroulette_name_et)
         val EDcomp_name_et :EditText = findViewById(R.id.EDcomp_name_et)
         val EDcomp_num1_et :EditText = findViewById(R.id.EDcomp_num1_et)

@@ -15,9 +15,13 @@ class MainActivity : AppCompatActivity() {
 
         //広告の表示
         MobileAds.initialize(this) {}
-        val adView = findViewById<AdView>(R.id.adView)
-        val adRequest = AdRequest.Builder().build()
-        adView.loadAd(adRequest)
+        val adView1 = findViewById<AdView>(R.id.adView1)
+        val adRequest1 = AdRequest.Builder().build()
+        adView1.loadAd(adRequest1)
+        val adView2 = findViewById<AdView>(R.id.adView2)
+        val adRequest2 = AdRequest.Builder().build()
+        adView2.loadAd(adRequest2)
+
 
         //変数宣言
         val btnNewRoulette = findViewById<Button>(R.id.button)

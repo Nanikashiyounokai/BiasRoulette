@@ -11,7 +11,7 @@
         android:id="@+id/title"
         android:layout_width="316dp"
         android:layout_height="314dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="60dp"
         android:contentDescription="@string/todo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,11 +36,11 @@
         android:id="@+id/button2"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:textColor="#000000"
+        android:layout_marginTop="30dp"
         android:background="@drawable/frame_style"
-        android:textSize="24sp"
         android:text="ルーレット一覧"
+        android:textColor="#000000"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,28 +50,43 @@
         android:id="@+id/button3"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:textColor="#000000"
+        android:layout_marginTop="30dp"
         android:background="@drawable/frame_style"
-        android:textSize="24sp"
         android:text="このアプリについて"
+        android:textColor="#000000"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button2" />
 
     <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
+        android:id="@+id/adView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        app:adUnitId="ca-app-pub-2529783942153390/1147578138"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-2529783942153390/1147578138"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+<!--本番ID"ca-app-pub-2529783942153390/1147578138"-->
+<!--練習ID"ca-app-pub-3940256099942544/6300978111"-->

@@ -66,14 +66,14 @@ class RouletteNameAdapter (data: OrderedRealmCollection<RouletteName>, ) :
         holder.roulette_edit_btn.setOnClickListener {
             val context = holder.itemView.context
             context.startActivity(Intent(context, EditRouletteActivity::class.java)
-                .putExtra("ROULETTO_NAME", roulette_name?.name.toString()))
+                .putExtra("ROULETTE_NAME", roulette_name?.name.toString()))
         }
 
         //Playボタンが押されたときの処理
         holder.roulette_play_btn.setOnClickListener {
             val context = holder.itemView.context
-            context.startActivity(Intent(context, PlayScreen::class.java)
-                .putExtra("ROULETTO_NAME", roulette_name?.name.toString()))
+            context.startActivity(Intent(context, RouletteImageMaker::class.java)
+                .putExtra("ROULETTE_NAME", roulette_name?.name.toString()))
         }
     }
 }

@@ -7,6 +7,7 @@ import android.graphics.*
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import io.realm.Realm
@@ -23,12 +24,13 @@ class RouletteImageMaker : AppCompatActivity() {
 
         //===ここから浦部作業部分(20221103)
         // 1) xmlとの紐付け
-        setContentView(R.layout.activity_edit_roulette)
+//        setContentView(R.layout.activity_edit_roulette)
 
         // 2) rouletteNameを遷移前「RouletteList」から引っ張ってくる。
-        val In_rouletteName = intent.getStringExtra("ROULETTO_NAME")
+        val In_rouletteName = intent.getStringExtra("ROULETTE_NAME")
 
         // 3) ルーレット名が「In_rouletteName」である項目を検索
+        realm = Realm.getDefaultInstance()
         val comp_name_list = arrayListOf<String>() //項目名が格納されるlist
         val comp_num1_list = arrayListOf<Int>() //表比率が格納されるlist
         val comp_num2_list = arrayListOf<Int>() //裏比率が格納されるlist
@@ -43,20 +45,21 @@ class RouletteImageMaker : AppCompatActivity() {
         }
 
         //===
+//        View.GONE
 
-        val r1 = intent.getStringExtra("ratio1")
-        val r2 = intent.getStringExtra("ratio2")
-        val r3 = intent.getStringExtra("ratio3")
-        val r4 = intent.getStringExtra("ratio4")
-        val r5 = intent.getStringExtra("ratio5")
-        val r6 = intent.getStringExtra("ratio6")
-        val r7 = intent.getStringExtra("ratio7")
-        val r8 = intent.getStringExtra("ratio8")
-        val r9 = intent.getStringExtra("ratio9")
-        val r10 = intent.getStringExtra("ratio10")
+//        この値は表比率
+        val r1 = comp_num1_list[0].toString()
+        val r2 = comp_num1_list[1].toString()
+        val r3 = comp_num1_list[2].toString()
+        val r4 = comp_num1_list[3].toString()
+        val r5 = comp_num1_list[4].toString()
+        val r6 = comp_num1_list[5].toString()
+        val r7 = comp_num1_list[6].toString()
+        val r8 = comp_num1_list[7].toString()
+        val r9 = comp_num1_list[8].toString()
+        val r10 = comp_num1_list[9].toString()
 
-
-        val myView : View = MyView(this, r1!!, r2, r3, r4, r5, r6, r7, r8, r9, r10)
+        val myView : View = MyView(this, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10)
         setContentView(myView)
 
         myView.post {
@@ -70,8 +73,14 @@ class RouletteImageMaker : AppCompatActivity() {
             val intent = Intent(this, PlayScreen::class.java)
             //intent変数をつなげる(第一引数はキー，第二引数は渡したい変数)
             intent.putExtra("capture",byteArray)
+            intent.putExtra("ROULETTE_NAME", In_rouletteName)
+            intent.putExtra("name",comp_name_list)
+            intent.putExtra("num1",comp_num1_list)
+            intent.putExtra("num2",comp_num2_list)
+
             //画面遷移を開始
             startActivity(intent)
+            finish()
         }
     }
 
