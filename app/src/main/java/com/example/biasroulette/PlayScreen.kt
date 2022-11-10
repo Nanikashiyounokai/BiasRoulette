@@ -34,7 +34,6 @@ class PlayScreen : AppCompatActivity() {
 //        Intent関係
         //rouletteNameを遷移前「RouletteList」から引っ張ってくる。
         val In_rouletteName = intent.getStringExtra("ROULETTE_NAME")
-        Log.d("ここをよめ！！！！！", In_rouletteName.toString())
 
         //定義したIn_rouletteNameをplay画面のrouletteNameという変数に代入。
         rouletteName.setText(In_rouletteName)
@@ -92,7 +91,7 @@ class PlayScreen : AppCompatActivity() {
             btnRotate.isEnabled = false
             btnStop.isEnabled = false
 
-            Log.d("ここをよめ！！！！！", num2.toString())
+            Log.d("ここをよめ！！！！", num2.toString())
 
             val result = valueDrawing(num2!![0],num2[1],num2[2],num2[3],num2[4],num2[5],num2[6],num2[7],num2[8],num2[9])
             val pos = stopPosition(result, num1!![0],num1[1],num1[2],num1[3],num1[4],num1[5],num1[6],num1[7],num1[8],num1[9])
