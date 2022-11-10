@@ -44,8 +44,17 @@ class RouletteImageMaker : AppCompatActivity() {
             comp_num2_list.add(comp_num2)
         }
 
-        //===
-//        View.GONE
+        val size = comp_num1_list.size
+        if(size != 10){
+           for (i in 0..10-size){
+               comp_name_list.add("null")
+               comp_num1_list.add(0)
+               comp_num2_list.add(0)
+           }
+        }
+
+        Log.d("ここをよめ！！！！", comp_name_list.toString())
+        Log.d("ここをよめ！！！！", comp_num1_list.toString())
 
 //        この値は表比率
         val r1 = comp_num1_list[0].toString()

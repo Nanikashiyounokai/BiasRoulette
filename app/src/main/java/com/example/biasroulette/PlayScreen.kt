@@ -91,8 +91,6 @@ class PlayScreen : AppCompatActivity() {
             btnRotate.isEnabled = false
             btnStop.isEnabled = false
 
-            Log.d("ここをよめ！！！！", num2.toString())
-
             val result = valueDrawing(num2!![0],num2[1],num2[2],num2[3],num2[4],num2[5],num2[6],num2[7],num2[8],num2[9])
             val pos = stopPosition(result, num1!![0],num1[1],num1[2],num1[3],num1[4],num1[5],num1[6],num1[7],num1[8],num1[9])
             //        停止回転系
@@ -101,11 +99,11 @@ class PlayScreen : AppCompatActivity() {
             animSet1.fillAfter = true
             animSet1.isFillEnabled = true
             val animRotate1 = RotateAnimation(
-                0.0f, -3600.0f-pos,
+                0.0f, -7200.0f-pos,
                 RotateAnimation.RELATIVE_TO_SELF, 0.5f,
                 RotateAnimation.RELATIVE_TO_SELF, 0.5f
             )
-            animRotate1.duration = 2500
+            animRotate1.duration = 5000
             animRotate1.fillAfter = true
             animSet1.addAnimation(animRotate1)
 
@@ -113,7 +111,7 @@ class PlayScreen : AppCompatActivity() {
             Handler().postDelayed( {
                 resultText.text = name!![result].toString()
                 btnRotate.isEnabled = true
-            }, 2500)
+            }, 5000)
         }
 
 //        戻るボタン
