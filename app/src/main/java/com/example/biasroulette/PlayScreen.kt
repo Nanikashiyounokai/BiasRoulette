@@ -34,7 +34,6 @@ class PlayScreen : AppCompatActivity() {
 //        Intent関係
         //rouletteNameを遷移前「RouletteList」から引っ張ってくる。
         val In_rouletteName = intent.getStringExtra("ROULETTE_NAME")
-        Log.d("ここをよめ！！！！！", In_rouletteName.toString())
 
         //定義したIn_rouletteNameをplay画面のrouletteNameという変数に代入。
         rouletteName.setText(In_rouletteName)
