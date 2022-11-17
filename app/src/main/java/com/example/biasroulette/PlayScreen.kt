@@ -16,6 +16,7 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import kotlin.properties.Delegates
 
+
 class PlayScreen : AppCompatActivity() {
 
     @SuppressLint("ResourceType")
@@ -30,6 +31,7 @@ class PlayScreen : AppCompatActivity() {
         val rouletteName = findViewById<TextView>(R.id.playRouletteName)
         val resultText = findViewById<TextView>(R.id.resultText)
         val imageView2 = findViewById<ImageView>(R.id.image_view_2)
+//        val arrow = findViewById<ImageView>(R.id.arrow)
 
 //        Intent関係
         //rouletteNameを遷移前「RouletteList」から引っ張ってくる。
@@ -59,6 +61,9 @@ class PlayScreen : AppCompatActivity() {
 
 //        止まるボタンの無効化
         btnStop.isEnabled = false
+
+//        arrowの位置調整
+//        arrow
 
 //        回すボタン
         btnRotate.setOnClickListener {
@@ -202,5 +207,6 @@ class PlayScreen : AppCompatActivity() {
 
         return resultDegreeList.shuffled()[0]
     }
+
 
 }
