@@ -31,7 +31,6 @@ class PlayScreen : AppCompatActivity() {
         val rouletteName = findViewById<TextView>(R.id.playRouletteName)
         val resultText = findViewById<TextView>(R.id.resultText)
         val imageView2 = findViewById<ImageView>(R.id.image_view_2)
-//        val arrow = findViewById<ImageView>(R.id.arrow)
 
 //        Intent関係
         //rouletteNameを遷移前「RouletteList」から引っ張ってくる。
@@ -61,12 +60,12 @@ class PlayScreen : AppCompatActivity() {
 
 //        止まるボタンの無効化
         btnStop.isEnabled = false
-
-//        arrowの位置調整
-//        arrow
+        resultText.text = ""
 
 //        回すボタン
         btnRotate.setOnClickListener {
+            resultText.text = "抽選中"
+
             //        通常回転系の定義
             val animSet0 = AnimationSet(true)
             animSet0.interpolator = DecelerateInterpolator()

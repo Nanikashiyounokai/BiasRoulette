@@ -65,7 +65,7 @@
         android:layout_marginTop="20dp"
         android:text="抽選結果"
         android:textColor="#000000"
-        android:textSize="24sp"
+        android:textSize="48sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,9 +74,9 @@
 
     <FrameLayout
         android:id="@+id/fl"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="504dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toTopOf="@+id/btnRotate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -91,19 +91,44 @@
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/arrow1" />
+            app:srcCompat="@drawable/exroulette" />
 
         <ImageView
             android:id="@+id/arrow"
             android:layout_width="match_parent"
-            android:layout_height="96dp"
+            android:layout_height="90dp"
             android:contentDescription="@string/todo"
+            android:translationY="60dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/arrow1" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelinePercent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineDpEnd"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="120dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineDpTop"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="100dp" />
+
+
     </FrameLayout>
+
+
 
     <Button
         android:id="@+id/btnRotate"
