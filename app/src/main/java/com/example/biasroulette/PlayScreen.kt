@@ -16,6 +16,7 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import kotlin.properties.Delegates
 
+
 class PlayScreen : AppCompatActivity() {
 
     @SuppressLint("ResourceType")
@@ -59,9 +60,12 @@ class PlayScreen : AppCompatActivity() {
 
 //        止まるボタンの無効化
         btnStop.isEnabled = false
+        resultText.text = ""
 
 //        回すボタン
         btnRotate.setOnClickListener {
+            resultText.text = "抽選中"
+
             //        通常回転系の定義
             val animSet0 = AnimationSet(true)
             animSet0.interpolator = DecelerateInterpolator()
@@ -202,5 +206,6 @@ class PlayScreen : AppCompatActivity() {
 
         return resultDegreeList.shuffled()[0]
     }
+
 
 }

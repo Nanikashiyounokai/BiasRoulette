@@ -53,8 +53,8 @@
         android:ems="10"
         android:hint="新規ルーレットの名前を入力"
         android:inputType="textPersonName"
-        android:textSize="24sp"
         android:maxLength="20"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -159,19 +159,6 @@
         app:layout_constraintStart_toEndOf="@+id/tv_ratio"
         app:layout_constraintTop_toBottomOf="@+id/roulette_name_et" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/comp_rv"
-        android:layout_width="390dp"
-        android:layout_height="280dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
-        app:layout_constraintBottom_toBottomOf="@id/divider2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.476"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/divider1"/>
-<!--        tools:listitem="@layout/comp_layout" />-->
-
     <EditText
         android:id="@+id/comp_name_et"
         android:layout_width="180dp"
@@ -180,10 +167,10 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/comp_flame"
         android:ems="10"
-        android:hint="項目名"
-        android:maxLength="10"
         android:gravity="center"
+        android:hint="項目名"
         android:inputType="textPersonName"
+        android:maxLength="10"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
@@ -195,10 +182,10 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/comp_flame"
         android:ems="10"
+        android:gravity="center"
         android:hint="比率"
         android:inputType="number"
         android:textSize="12sp"
-        android:gravity="center"
         app:layout_constraintStart_toEndOf="@+id/comp_name_et"
         app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
@@ -210,11 +197,33 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/comp_flame"
         android:ems="10"
-        android:hint="裏比率"
         android:gravity="center"
+        android:hint="裏比率"
         android:inputType="number"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/comp_num1_et"
         app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/divider2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/comp_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/divider2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintVertical_bias="0.0" />
+        <!--        tools:listitem="@layout/comp_layout" />-->
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

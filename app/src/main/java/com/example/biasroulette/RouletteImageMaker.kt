@@ -5,15 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.*
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import io.realm.Realm
 import io.realm.kotlin.where
 import java.io.ByteArrayOutputStream
+import java.lang.Math.PI
 import kotlin.properties.Delegates
+
 
 class RouletteImageMaker : AppCompatActivity() {
     private lateinit var realm: Realm
@@ -23,9 +24,6 @@ class RouletteImageMaker : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         //===ここから浦部作業部分(20221103)
-        // 1) xmlとの紐付け
-//        setContentView(R.layout.activity_edit_roulette)
-
         // 2) rouletteNameを遷移前「RouletteList」から引っ張ってくる。
         val In_rouletteName = intent.getStringExtra("ROULETTE_NAME")
 
@@ -53,29 +51,14 @@ class RouletteImageMaker : AppCompatActivity() {
            }
         }
 
-        Log.d("ここをよめ！！！！", comp_name_list.toString())
-        Log.d("ここをよめ！！！！", comp_num1_list.toString())
-
-//        この値は表比率
-        val r1 = comp_num1_list[0].toString()
-        val r2 = comp_num1_list[1].toString()
-        val r3 = comp_num1_list[2].toString()
-        val r4 = comp_num1_list[3].toString()
-        val r5 = comp_num1_list[4].toString()
-        val r6 = comp_num1_list[5].toString()
-        val r7 = comp_num1_list[6].toString()
-        val r8 = comp_num1_list[7].toString()
-        val r9 = comp_num1_list[8].toString()
-        val r10 = comp_num1_list[9].toString()
-
-        val myView : View = MyView(this, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10)
+        val myView : View = MyView(this, comp_num1_list, comp_name_list,size)
         setContentView(myView)
 
         myView.post {
-            val capture : Bitmap? = getBitmapFromView(myView)
+            val capture : Bitmap = getBitmapFromView(myView)
 
             val stream = ByteArrayOutputStream()
-            capture?.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            capture.compress(Bitmap.CompressFormat.PNG, 100, stream)
             val byteArray: ByteArray = stream.toByteArray()
 
             //Intentのインスタンスを作成
@@ -93,40 +76,41 @@ class RouletteImageMaker : AppCompatActivity() {
         }
     }
 
-    private fun getBitmapFromView(view: View): Bitmap? {
-        val bitmap = Bitmap.createBitmap(view.width,view.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
+    private fun getBitmapFromView(view: View): Bitmap {
+        val bitmap1 = Bitmap.createBitmap(view.width,view.height, Bitmap.Config.ARGB_8888)
+//        val bitmap1 = centerCropBitmap(bitmap)
+        val canvas = Canvas(bitmap1)
         view.draw(canvas)
-        return bitmap
+        return bitmap1
     }
 
+    private fun centerCropBitmap(bitmap: Bitmap): Bitmap {
+        if (bitmap.width == bitmap.height) {
+            return bitmap
+        }
+        if (bitmap.width > bitmap.height) {
+            val leftOffset = (bitmap.width - bitmap.height) / 2
+            return Bitmap.createBitmap(bitmap, leftOffset, 0, bitmap.height, bitmap.height, null, true)
+        }else{
+            val topOffset = (bitmap.height - bitmap.width) / 2
+            return Bitmap.createBitmap(bitmap, 0, topOffset, bitmap.width, bitmap.width, null, true
+            )
+
+        }
+    }
 
     // Viewを継承したクラス
-    internal inner class MyView(context: Context, r1: String, r2:String?, r3:String?, r4:String?, r5:String?, r6:String?, r7:String?, r8:String?, r9:String?, r10:String?) : View(context) {
+    internal inner class MyView(context: Context,
+                                private val num1List: ArrayList<Int>,
+                                private val nameList:ArrayList<String>,
+                                private val size:Int) : View(context) {
 
-        private var paint: Paint = Paint()
+        private var paint = Paint()
         private val paint1 = Paint()
         private val paint2 = Paint()
-        private val paint3 = Paint()
-        private val paint4 = Paint()
-        private val paint5 = Paint()
-        private val paint6 = Paint()
-        private val paint7 = Paint()
-        private val paint8 = Paint()
-        private val paint9 = Paint()
-        private val paint10 = Paint()
+
         private var sum by Delegates.notNull<Float>()
 
-        private val rr1 = r1.toFloat()
-        private val rr2 = r2?.toFloat()
-        private val rr3 = r3?.toFloat()
-        private val rr4 = r4?.toFloat()
-        private val rr5 = r5?.toFloat()
-        private val rr6 = r6?.toFloat()
-        private val rr7 = r7?.toFloat()
-        private val rr8 = r8?.toFloat()
-        private val rr9 = r9?.toFloat()
-        private val rr10 = r10?.toFloat()
 
         @SuppressLint("DrawAllocation")
         override fun onDraw(canvas: Canvas){
@@ -144,92 +128,94 @@ class RouletteImageMaker : AppCompatActivity() {
                 // 円
                 // (x1,y1,r,paint) 中心x1座標, 中心y1座標, r半径
                 canvas.drawCircle((width / 2).toFloat(), (height / 2).toFloat(), (width / 2.5).toFloat(), paint)
-                // 各項目
+                // 各項目のグラフ
                 val rect = RectF((width / 10).toFloat(), (height / 2 - 2 * width / 5).toFloat(), (9 * width / 10).toFloat(), (height / 2 + 2 * width / 5).toFloat())
-                itemRation(canvas,rect, rr1,rr2,rr3,rr4,rr5,rr6,rr7,rr8,rr9,rr10)
+                itemRation(canvas,rect, num1List)
+                enterItemName(canvas, num1List, nameList,size)
+
 
             } else {
                 // 円
                 canvas.drawCircle((width / 2).toFloat(), (height / 2).toFloat(), (height / 2.5).toFloat(), paint)
-                //　各項目
+                //　各項目のグラフ
                 val rect = RectF((width / 2 - 2 * height / 5).toFloat(), (height / 10).toFloat(), (width / 2 + 2 * height / 5).toFloat(), (9 * height / 10).toFloat())
-                itemRation(canvas,rect, rr1,rr2,rr3,rr4,rr5,rr6,rr7,rr8,rr9,rr10)
+                itemRation(canvas,rect, num1List)
+                enterItemName(canvas, num1List, nameList,size)
+
             }
 
         }
 
-        private fun itemRation(canvas: Canvas, rect: RectF, a:Float, b:Float?, c:Float?, d:Float?, e:Float?, f:Float?, g:Float?, h:Float?, i:Float?, j:Float?){
-            if (b != null && c != null && d != null && e != null && f != null && g != null && h != null && i != null && j != null) {
-                sum = a + b + c + d + e + f + g + h + i + j
-            } else if(b != null && c != null && d != null && e != null && f != null && g != null && h != null && i != null){
-                sum = a + b + c + d + e + f + g + h + i
-            } else if(b != null && c != null && d != null && e != null && f != null && g != null && h != null){
-                sum = a + b + c + d + e + f + g + h
-            } else if(b != null && c != null && d != null && e != null && f != null && g != null){
-                sum = a + b + c + d + e + f + g
-            } else if(b != null && c != null && d != null && e != null && f != null){
-                sum = a + b + c + d + e + f
-            } else if(b != null && c != null && d != null && e != null){
-                sum = a + b + c + d + e
-            } else if(b != null && c != null && d != null){
-                sum = a + b + c + d
-            } else if(b != null && c != null){
-                sum = a + b + c
-            } else if(b != null){
-                sum = a + b
-            } else{
-                sum = a
-            }
-
-            val a0 : Float = a/sum
-            val b0 : Float? = b?.div(sum)
-            val c0 : Float? = c?.div(sum)
-            val d0 : Float? = d?.div(sum)
-            val e0 : Float? = e?.div(sum)
-            val f0 : Float? = f?.div(sum)
-            val g0 : Float? = g?.div(sum)
-            val h0 : Float? = h?.div(sum)
-            val i0 : Float? = i?.div(sum)
-            val j0 : Float? = j?.div(sum)
+        private fun itemRation(canvas: Canvas, rect: RectF, num1List: ArrayList<Int>){
+            sum = num1List.sum().toFloat()
+            val a0 : Float = num1List[0].toFloat()/sum
+            val b0 : Float = num1List[1].toFloat()/sum
+            val c0 : Float = num1List[2].toFloat()/sum
+            val d0 : Float = num1List[3].toFloat()/sum
+            val e0 : Float = num1List[4].toFloat()/sum
+            val f0 : Float = num1List[5].toFloat()/sum
+            val g0 : Float = num1List[6].toFloat()/sum
+            val h0 : Float = num1List[7].toFloat()/sum
+            val i0 : Float = num1List[8].toFloat()/sum
+            val j0 : Float = num1List[9].toFloat()/sum
 
             paint1.color = Color.argb(195, 233, 58, 36)
             canvas.drawArc(rect, -90F, a0*360, true, paint1)
-            paint2.color = Color.argb(195, 234, 97, 25)
-            if (b0 != null) {
-                canvas.drawArc(rect, -90F+a0*360, b0*360, true, paint2)
+            paint1.color = Color.argb(195, 234, 97, 25)
+            canvas.drawArc(rect, -90F+a0*360, b0*360, true, paint1)
+            paint1.color = Color.argb(195, 252, 202, 0)
+            canvas.drawArc(rect, -90F+(a0+ b0)*360, c0*360, true, paint1)
+            paint1.color = Color.argb(195, 184, 198, 1)
+            canvas.drawArc(rect, -90F+(a0+ b0+ c0)*360, d0*360, true, paint1)
+            paint1.color = Color.argb(195, 58, 149, 42)
+            canvas.drawArc(rect, -90F+(a0+ b0+ c0+ d0)*360, e0*360, true, paint1)
+            paint1.color = Color.argb(195, 10, 151, 114)
+            canvas.drawArc(rect, -90F+(a0+ b0+ c0+ d0+ e0)*360, f0*360, true, paint1)
+            paint1.color = Color.argb(195, 24, 158, 151)
+            canvas.drawArc(rect, -90F+(a0+ b0+ c0+ d0+ e0+ f0)*360, g0*360, true, paint1)
+            paint1.color = Color.argb(195, 89, 113, 157)
+            canvas.drawArc(rect, -90F+(a0+ b0+ c0+ d0+ e0+ f0+ g0)*360, h0*360, true, paint1)
+            paint1.color = Color.argb(195, 104, 68, 126)
+            canvas.drawArc(rect, -90F+(a0+ b0+ c0+ d0+ e0+ f0+ g0+ h0)*360, i0*360, true, paint1)
+            paint1.color = Color.argb(195, 224, 61, 114)
+            canvas.drawArc(rect, -90F+(a0+ b0+ c0+ d0+ e0+ f0+ g0+ h0+ i0)*360, j0*360, true, paint1)
+
+        }
+
+        private fun enterItemName(canvas: Canvas, num1List: ArrayList<Int>, nameList: ArrayList<String>,size: Int){
+            sum = num1List.sum().toFloat()
+            val a0 : Float = 360 * num1List[0].toFloat()/sum
+            val b0 : Float = 360 * (num1List[0]+num1List[1]).toFloat()/sum
+            val c0 : Float = 360 * (num1List[0]+num1List[1]+num1List[2]).toFloat()/sum
+            val d0 : Float = 360 * (num1List[0]+num1List[1]+num1List[2]+num1List[3]).toFloat()/sum
+            val e0 : Float = 360 * (num1List[0]+num1List[1]+num1List[2]+num1List[3]+num1List[4]).toFloat()/sum
+            val f0 : Float = 360 * (num1List[0]+num1List[1]+num1List[2]+num1List[3]+num1List[4]+num1List[5]).toFloat()/sum
+            val g0 : Float = 360 * (num1List[0]+num1List[1]+num1List[2]+num1List[3]+num1List[4]+num1List[5]+num1List[6]).toFloat()/sum
+            val h0 : Float = 360 * (num1List[0]+num1List[1]+num1List[2]+num1List[3]+num1List[4]+num1List[5]+num1List[6]+num1List[7]).toFloat()/sum
+            val i0 : Float = 360 * (num1List[0]+num1List[1]+num1List[2]+num1List[3]+num1List[4]+num1List[5]+num1List[6]+num1List[7]+num1List[8]).toFloat()/sum
+            val j0 : Float = 360 * (num1List[0]+num1List[1]+num1List[2]+num1List[3]+num1List[4]+num1List[5]+num1List[6]+num1List[7]+num1List[8]+num1List[9]).toFloat()/sum
+
+            val degreeList = arrayListOf<Float>()
+            degreeList.addAll(listOf(0F,a0,b0,c0,d0,e0,f0,g0,h0,i0,j0))
+
+            paint2.style = Paint.Style.FILL_AND_STROKE
+            paint2.strokeWidth = 2F
+            paint2.textSize = 50F
+            paint2.color = Color.argb(255, 0, 0, 0)
+
+            for (i in 0 until size){
+                val character = nameList[i]
+                val metrics: Paint.FontMetrics = paint2.fontMetrics //FontMetricsを取得
+                val textWidth = paint2.measureText(character)
+                val degree = -180-(degreeList[i] + degreeList[i+1])/2
+                if (degree <= 360){
+                    canvas.drawText(character,
+                        (width/2).toFloat() - (textWidth / 2) + 200f * kotlin.math.sin(PI * degree / 180).toFloat(),
+                        (height/2).toFloat() - (metrics.ascent + metrics.descent) / 2 + 200f * kotlin.math.cos(PI * degree/ 180).toFloat(),
+                        paint2)
+                }
             }
-            paint3.color = Color.argb(195, 252, 202, 0)
-            if (c0 != null) {
-                canvas.drawArc(rect, -90F+(a0+ b0!!)*360, c0*360, true, paint3)
-            }
-            paint4.color = Color.argb(195, 184, 198, 1)
-            if (d0 != null) {
-                canvas.drawArc(rect, -90F+(a0+ b0!!+ c0!!)*360, d0*360, true, paint4)
-            }
-            paint5.color = Color.argb(195, 58, 149, 42)
-            if (e0 != null) {
-                canvas.drawArc(rect, -90F+(a0+ b0!!+ c0!!+ d0!!)*360, e0*360, true, paint5)
-            }
-            paint6.color = Color.argb(195, 10, 151, 114)
-            if (f0 != null) {
-                canvas.drawArc(rect, -90F+(a0+ b0!!+ c0!!+ d0!!+ e0!!)*360, f0*360, true, paint6)
-            }
-            paint7.color = Color.argb(195, 24, 158, 151)
-            if (g0 != null) {
-                canvas.drawArc(rect, -90F+(a0+ b0!!+ c0!!+ d0!!+ e0!!+ f0!!)*360, g0*360, true, paint7)
-            }
-            paint8.color = Color.argb(195, 89, 113, 157)
-            if (h0 != null) {
-                canvas.drawArc(rect, -90F+(a0+ b0!!+ c0!!+ d0!!+ e0!!+ f0!!+ g0!!)*360, h0*360, true, paint8)
-            }
-            paint9.color = Color.argb(195, 104, 68, 126)
-            if (i0 != null) {
-                canvas.drawArc(rect, -90F+(a0+ b0!!+ c0!!+ d0!!+ e0!!+ f0!!+ g0!!+ h0!!)*360, i0*360, true, paint9)
-            }
-            paint10.color = Color.argb(195, 224, 61, 114)
-            if (j0 != null) {
-                canvas.drawArc(rect, -90F+(a0+ b0!!+ c0!!+ d0!!+ e0!!+ f0!!+ g0!!+ h0!!+ i0!!)*360, j0*360, true, paint10)
-            }
+
         }
 
 

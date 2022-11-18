@@ -18,9 +18,12 @@ class MainActivity : AppCompatActivity() {
         val adView1 = findViewById<AdView>(R.id.adView1)
         val adRequest1 = AdRequest.Builder().build()
         adView1.loadAd(adRequest1)
-        val adView2 = findViewById<AdView>(R.id.adView2)
-        val adRequest2 = AdRequest.Builder().build()
-        adView2.loadAd(adRequest2)
+        val adView201 = findViewById<AdView>(R.id.adView201)
+        val adRequest201 = AdRequest.Builder().build()
+        adView201.loadAd(adRequest201)
+        val adView202 = findViewById<AdView>(R.id.adView202)
+        val adRequest202 = AdRequest.Builder().build()
+        adView202.loadAd(adRequest202)
 
 
         //変数宣言
