@@ -15,15 +15,12 @@ class MainActivity : AppCompatActivity() {
 
         //広告の表示
         MobileAds.initialize(this) {}
-        val adView1 = findViewById<AdView>(R.id.adView1)
+        val adView1 = findViewById<AdView>(R.id.adView1main)
         val adRequest1 = AdRequest.Builder().build()
         adView1.loadAd(adRequest1)
-        val adView201 = findViewById<AdView>(R.id.adView201)
-        val adRequest201 = AdRequest.Builder().build()
-        adView201.loadAd(adRequest201)
-        val adView202 = findViewById<AdView>(R.id.adView202)
-        val adRequest202 = AdRequest.Builder().build()
-        adView202.loadAd(adRequest202)
+        val adView2 = findViewById<AdView>(R.id.adView2main)
+        val adRequest2 = AdRequest.Builder().build()
+        adView2.loadAd(adRequest2)
 
 
         //変数宣言

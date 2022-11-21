@@ -256,9 +256,12 @@ class EditRouletteActivity : AppCompatActivity() {
 
         //広告の表示
         MobileAds.initialize(this) {}
-        val adView = findViewById<AdView>(R.id.adView)
-        val adRequest = AdRequest.Builder().build()
-        adView.loadAd(adRequest)
+        val adView1 = findViewById<AdView>(R.id.adView1edit)
+        val adRequest1 = AdRequest.Builder().build()
+        adView1.loadAd(adRequest1)
+        val adView2 = findViewById<AdView>(R.id.adView2edit)
+        val adRequest2 = AdRequest.Builder().build()
+        adView2.loadAd(adRequest2)
 
     }
 
