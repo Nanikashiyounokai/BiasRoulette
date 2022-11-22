@@ -53,4 +53,6 @@ dependencies {
 
     implementation 'androidx.recyclerview:recyclerview:1.2.1' //20220916
 
+    implementation 'com.beardedhen:androidbootstrap:2.3.2'//20221110
+
 }
