@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.marginLeft
@@ -40,7 +41,7 @@ class NewRoulette : AppCompatActivity() {
         realm = Realm.getDefaultInstance()
 
         val ad_comp_btn = findViewById<Button>(R.id.ad_comp_btn)
-        val ura_btn = findViewById<Button>(R.id.ura_btn)
+        val ura_btn = findViewById<ImageButton>(R.id.ura_btn)
         val comp_rv = findViewById<RecyclerView>(R.id.comp_rv)
         val finish_btn = findViewById<Button>(R.id.finish_btn)
         val comp_name_et :EditText = findViewById(R.id.comp_name_et)
@@ -79,6 +80,8 @@ class NewRoulette : AppCompatActivity() {
                comp_num2_et.visibility = View.VISIBLE
                comp_num1_et.layoutParams.width = dpTopx(50).toInt()
 
+               ura_btn.setBackgroundResource(R.drawable.key_open)
+
             } else {
                 n = 0
                var recyclerAdapter = CompDateAdapter2(addList2, addList)
@@ -91,6 +94,8 @@ class NewRoulette : AppCompatActivity() {
 
                comp_num2_et.visibility = View.GONE
                comp_num1_et.layoutParams.width = dpTopx(116).toInt()
+
+               ura_btn.setBackgroundResource(R.drawable.key_close)
             }
         }
 
@@ -103,6 +108,13 @@ class NewRoulette : AppCompatActivity() {
                     AlertDialog.Builder(this)
                         .setTitle("ERROR!!")
                         .setMessage("全ての項目を入力して下さい")
+                        .setPositiveButton("OK",null)
+                        .show()
+                }else if (comp_num1_et.text.toString().toInt() == 0 ||
+                    comp_num1_et.text.toString().toInt() > 100) {
+                    AlertDialog.Builder(this)
+                        .setTitle("ERROR!!")
+                        .setMessage("比率は1から100の整数で入力してください")
                         .setPositiveButton("OK",null)
                         .show()
                 }else{
@@ -119,6 +131,9 @@ class NewRoulette : AppCompatActivity() {
                     recyclerView.adapter = recyclerAdapter
                     recyclerView.layoutManager = LinearLayoutManager(this)
                     recyclerAdapter.notifyItemInserted(addList2.lastIndex) //表示を更新(リストの最後に挿入)
+
+                    comp_name_et.text = null
+                    comp_num1_et.text = null
                 }
 
             }else{
@@ -130,6 +145,16 @@ class NewRoulette : AppCompatActivity() {
                         .setMessage("全ての項目を入力してください")
                         .setPositiveButton("OK",null)
                         .show()
+                } else if (comp_num1_et.text.toString().toInt() == 0 ||
+                comp_num1_et.text.toString().toInt() > 100 ||
+                    comp_num2_et.text.toString().toInt() == 0 ||
+                    comp_num2_et.text.toString().toInt() > 100
+                ) {
+                AlertDialog.Builder(this)
+                    .setTitle("ERROR!!")
+                    .setMessage("比率は1から100の整数で入力してください")
+                    .setPositiveButton("OK",null)
+                    .show()
                 }else{
                     val data = CompData(comp_name_et.text.toString(),
                         comp_num1_et.text.toString(),
@@ -145,12 +170,12 @@ class NewRoulette : AppCompatActivity() {
                     recyclerView.adapter = recyclerAdapter
                     recyclerView.layoutManager = LinearLayoutManager(this)
                     recyclerAdapter.notifyItemInserted(addList.lastIndex) //表示を更新(リストの最後に挿入)
+
+                    comp_name_et.text = null
+                    comp_num1_et.text = null
+                    comp_num2_et.text = null
                 }
             }
-
-            comp_name_et.text = null
-            comp_num1_et.text = null
-            comp_num2_et.text = null
 
         }
 

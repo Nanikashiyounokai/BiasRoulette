@@ -101,14 +101,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
-    <Button
+    <ImageButton
         android:id="@+id/ura_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="fitCenter"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="55dp"
-        android:background="#0000"
-        android:text="㊙︎"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/key_close"
         android:textColor="#000000"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -239,5 +239,21 @@
             app:layout_constraintVertical_bias="0.0" />
         <!--        tools:listitem="@layout/comp_layout" />-->
     </FrameLayout>
+
+<!--    <com.beardedhen.androidbootstrap.BootstrapButton-->
+<!--        android:id="@+id/bootstrap_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="20dp"-->
+
+<!--        android:text="button"-->
+<!--        app:bb_icon_left="fa-smile-o"-->
+<!--        app:bb_type="danger"-->
+
+<!--        app:layout_constraintBottom_toTopOf="@+id/adView"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/finish_btn"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/comp_name_et"-->
+<!--        />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

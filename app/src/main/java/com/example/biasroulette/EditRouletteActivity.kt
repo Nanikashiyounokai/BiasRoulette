@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,7 +40,7 @@ class EditRouletteActivity : AppCompatActivity() {
         val EDcomp_num2_et :EditText = findViewById(R.id.EDcomp_num2_et)
         val EDad_comp_btn: Button = findViewById(R.id.EDad_comp_btn)
         val EDupdate_btn: Button = findViewById(R.id.EDupdate_btn)
-        val EDura_btn: Button = findViewById(R.id.EDura_btn)
+        val EDura_btn: ImageButton = findViewById(R.id.EDura_btn)
         val EDtv_ratio: TextView = findViewById(R.id.EDtv_ratio)
         val EDtv_ura_ratio: TextView = findViewById(R.id.EDtv_ura_ratio)
 
@@ -87,6 +88,8 @@ class EditRouletteActivity : AppCompatActivity() {
                 EDcomp_num2_et.visibility = View.VISIBLE
                 EDcomp_num1_et.layoutParams.width = dpTopx(50).toInt()
 
+                EDura_btn.setBackgroundResource(R.drawable.key_open)
+
             } else {
                 n = 0
                 var recyclerAdapter = CompDateAdapter2(addList2, addList)
@@ -99,6 +102,8 @@ class EditRouletteActivity : AppCompatActivity() {
 
                 EDcomp_num2_et.visibility = View.GONE
                 EDcomp_num1_et.layoutParams.width = dpTopx(116).toInt()
+
+                EDura_btn.setBackgroundResource(R.drawable.key_close)
             }
         }
 
@@ -113,6 +118,13 @@ class EditRouletteActivity : AppCompatActivity() {
                         .setMessage("全ての項目を入力して下さい")
                         .setPositiveButton("OK",null)
                         .show()
+                }else if (EDcomp_num1_et.text.toString().toInt() == 0 ||
+                EDcomp_num1_et.text.toString().toInt() > 100) {
+                AlertDialog.Builder(this)
+                    .setTitle("ERROR!!")
+                    .setMessage("比率は1から100の整数で入力してください")
+                    .setPositiveButton("OK",null)
+                    .show()
                 }else{
                     val data = CompData(EDcomp_name_et.text.toString(),
                         EDcomp_num1_et.text.toString(),
@@ -138,7 +150,17 @@ class EditRouletteActivity : AppCompatActivity() {
                         .setMessage("全ての項目を入力してください")
                         .setPositiveButton("OK",null)
                         .show()
-                }else{
+                } else if (EDcomp_num1_et.text.toString().toInt() == 0 ||
+                        EDcomp_num1_et.text.toString().toInt() > 100 ||
+                        EDcomp_num2_et.text.toString().toInt() == 0 ||
+                        EDcomp_num2_et.text.toString().toInt() > 100
+                ) {
+                AlertDialog.Builder(this)
+                    .setTitle("ERROR!!")
+                    .setMessage("比率は1から100の整数で入力してください")
+                    .setPositiveButton("OK",null)
+                    .show()
+                } else {
                     val data = CompData(EDcomp_name_et.text.toString(),
                         EDcomp_num1_et.text.toString(),
                         EDcomp_num2_et.text.toString())
