@@ -131,6 +131,11 @@ class PlayScreen : AppCompatActivity() {
 
     }
 
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+    }
+
     //    抽選機構（裏比率を使用）
     private fun valueDrawing(a:Int, b:Int?, c:Int?, d:Int?, e:Int?, f:Int?, g:Int?, h:Int?, i:Int?, j:Int?, k:Int?, l:Int?, m:Int?, n:Int?, o:Int?, p:Int?, q:Int?, r:Int?, s:Int?, t:Int?):Int{
         val box : MutableList<Int> = mutableListOf()

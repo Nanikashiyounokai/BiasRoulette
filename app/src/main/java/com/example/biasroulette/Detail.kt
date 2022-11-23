@@ -15,14 +15,6 @@ class Detail : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        val toMethodButton = findViewById<Button>(R.id.toMethodButton)
-
-        toMethodButton.setOnClickListener {
-            intent = Intent(this, Method::class.java)
-            startActivity(intent)
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }
-
         //広告の表示
         MobileAds.initialize(this) {}
         val adView1 = findViewById<AdView>(R.id.adView1detail)

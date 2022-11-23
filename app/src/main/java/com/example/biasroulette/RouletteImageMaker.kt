@@ -72,6 +72,7 @@ class RouletteImageMaker : AppCompatActivity() {
 
             //画面遷移を開始
             startActivity(intent)
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }
     }
