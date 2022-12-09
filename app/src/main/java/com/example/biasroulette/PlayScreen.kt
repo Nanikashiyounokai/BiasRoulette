@@ -99,7 +99,7 @@ class PlayScreen : AppCompatActivity() {
             btnStop.isEnabled = false
 
             val result = valueDrawing(num2!![0],num2[1],num2[2],num2[3],num2[4],num2[5],num2[6],num2[7],num2[8],num2[9],num2[10],num2[11],num2[12],num2[13],num2[14],num2[15],num2[16],num2[17],num2[18],num2[19])
-            val pos = stopPosition(result, num1!![0],num1[1],num1[2],num1[3],num1[4],num1[5],num1[6],num1[7],num1[8],num1[9],num2[10],num2[11],num2[12],num2[13],num2[14],num2[15],num2[16],num2[17],num2[18],num2[19])
+            val pos = stopPosition(result, num1!![0],num1[1],num1[2],num1[3],num1[4],num1[5],num1[6],num1[7],num1[8],num1[9],num1[10],num1[11],num1[12],num1[13],num1[14],num1[15],num1[16],num1[17],num1[18],num1[19])
             //        停止回転系
             val animSet1 = AnimationSet(true)
             animSet1.interpolator = DecelerateInterpolator()
