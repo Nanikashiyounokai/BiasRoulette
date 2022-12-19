@@ -5,7 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doBeforeTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import io.realm.Realm
 import io.realm.kotlin.where
@@ -14,9 +17,9 @@ class CompDateAdapter(private val compDateList: ArrayList<CompData>, private val
 
     //ViewHolder(インナークラス)
     inner class ViewHolderItem(v:View, rAdapter: CompDateAdapter) :RecyclerView.ViewHolder(v) {
-        val comp_name_holder : TextView = v.findViewById(R.id.comp_name)
-        val comp_num1_holder : TextView = v.findViewById(R.id.comp_num1)
-        val comp_num2_holder : TextView = v.findViewById(R.id.comp_num2)
+        val comp_name_holder : EditText = v.findViewById(R.id.comp_name)
+        val comp_num1_holder : EditText = v.findViewById(R.id.comp_num1)
+        val comp_num2_holder : EditText = v.findViewById(R.id.comp_num2)
         val delete_btn : Button = v.findViewById(R.id.delete_btn)
 
         init {
@@ -27,8 +30,57 @@ class CompDateAdapter(private val compDateList: ArrayList<CompData>, private val
                 compDateList.removeAt(position)
                 compDateList2.removeAt(position)
                 rAdapter.notifyItemRemoved(position)
-
             }
+
+            //Edit Textが更新されたら、position番目の要素をデリートし、position番目に更新済み要素を追加する
+            //==項目名==
+            comp_name_holder.doAfterTextChanged {
+                val position:Int = adapterPosition
+                compDateList2.removeAt(position)
+                compDateList.removeAt(position)
+                val data = CompData(comp_name_holder.text.toString(),
+                    comp_num1_holder.text.toString(),
+                    comp_num2_holder.text.toString())
+                compDateList.add(position, data)
+
+                val data2 = CompData2_2(comp_name_holder.text.toString(),
+                    comp_num1_holder.text.toString())
+                compDateList2.add(position, data2)
+            }
+            //=======
+
+            //==表比率==
+            comp_num1_holder.doAfterTextChanged {
+                val position:Int = adapterPosition
+                compDateList2.removeAt(position)
+                compDateList.removeAt(position)
+                val data = CompData(comp_name_holder.text.toString(),
+                    comp_num1_holder.text.toString(),
+                    comp_num2_holder.text.toString())
+                compDateList.add(position, data)
+
+                val data2 = CompData2_2(comp_name_holder.text.toString(),
+                    comp_num1_holder.text.toString())
+                compDateList2.add(position, data2)
+            }
+            //========
+
+            //==裏比率==
+            comp_num2_holder.doAfterTextChanged {
+                val position:Int = adapterPosition
+                compDateList2.removeAt(position)
+                compDateList.removeAt(position)
+                val data = CompData(comp_name_holder.text.toString(),
+                    comp_num1_holder.text.toString(),
+                    comp_num2_holder.text.toString())
+                compDateList.add(position, data)
+
+                val data2 = CompData2_2(comp_name_holder.text.toString(),
+                    comp_num1_holder.text.toString())
+                compDateList2.add(position, data2)
+            }
+            //========
+
         }
 
     }
@@ -44,10 +96,10 @@ class CompDateAdapter(private val compDateList: ArrayList<CompData>, private val
     override fun onBindViewHolder(holder: ViewHolderItem, position: Int) {
 
         val currentItem = compDateList[position] //何番目のリスト(アイテム)ですか
+        holder.comp_name_holder.setText(currentItem.comp_name)
+        holder.comp_num1_holder.setText(currentItem.comp_num1)
+        holder.comp_num2_holder.setText(currentItem.comp_num2)
 
-        holder.comp_name_holder.text = currentItem.comp_name
-        holder.comp_num1_holder.text = currentItem.comp_num1
-        holder.comp_num2_holder.text = currentItem.comp_num2
     }
 
     //リストのサイズ
