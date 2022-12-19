@@ -219,40 +219,69 @@ class NewRoulette : AppCompatActivity() {
                     .show()
 
             }else{
-                //RouletteNameの保存
-                realm.executeTransaction {
-                    //                db: Realm ->
-                    val maxId = realm.where<RouletteName>().max("id")
-                    val nextId = (maxId?.toLong() ?: 0L) + 1L
-                    val roulette_name = realm.createObject<RouletteName>(nextId)
-                    roulette_name.name = roulette_name_et.text.toString()
+                //comp項目が全て埋まっているか、比率は正しいかチェック
+                var check = "True"
+                for (data in addList){
+                    if(data.comp_name.isNullOrBlank() ||
+                        data.comp_num1.isNullOrBlank()  ||
+                        data.comp_num2.isNullOrBlank() ){
+                        check = "False1"
+                    }else if(data.comp_num1.toInt() == 0 ||
+                        data.comp_num1.toInt() > 100 ||
+                        data.comp_num2.toInt() == 0 ||
+                        data.comp_num2.toInt() > 100){
+                        check = "False2"
+                    }
                 }
 
-                //Rouletteの保存
-                for (data in addList) {
+                if(check == "False1"){
+                    AlertDialog.Builder(this)
+                        .setTitle("ERROR!!")
+                        .setMessage("項目に空欄があります")
+                        .setPositiveButton("OK",null)
+                        .show()
+                }else if(check == "False2") {
+                    AlertDialog.Builder(this)
+                        .setTitle("ERROR!!")
+                        .setMessage("比率は1から100の整数で入力してください")
+                        .setPositiveButton("OK",null)
+                        .show()
+                }else{
+                    //RouletteNameの保存
                     realm.executeTransaction {
                         //                db: Realm ->
-                        val maxId = realm.where<Roulette>().max("id")
+                        val maxId = realm.where<RouletteName>().max("id")
                         val nextId = (maxId?.toLong() ?: 0L) + 1L
-                        val roulette = realm.createObject<Roulette>(nextId)
-                        roulette.name = roulette_name_et.text.toString()
-                        roulette.comp_name = data.comp_name
-                        roulette.comp_num1 = data.comp_num1.toInt()
-                        roulette.comp_num2 = data.comp_num2.toInt()
+                        val roulette_name = realm.createObject<RouletteName>(nextId)
+                        roulette_name.name = roulette_name_et.text.toString()
                     }
-                }
 
-                //top画面に戻る
-                AlertDialog.Builder(this)
-                    .setTitle("ルーレット完成")
-                    .setMessage("ルーレットが完成しました")
-                    .setPositiveButton("ホームに戻る") { _, _ ->
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                        finish()
+                    //Rouletteの保存
+                    for (data in addList) {
+                        realm.executeTransaction {
+                            //                db: Realm ->
+                            val maxId = realm.where<Roulette>().max("id")
+                            val nextId = (maxId?.toLong() ?: 0L) + 1L
+                            val roulette = realm.createObject<Roulette>(nextId)
+                            roulette.name = roulette_name_et.text.toString()
+                            roulette.comp_name = data.comp_name
+                            roulette.comp_num1 = data.comp_num1.toInt()
+                            roulette.comp_num2 = data.comp_num2.toInt()
+                        }
                     }
-                    .show()
+
+                    //top画面に戻る
+                    AlertDialog.Builder(this)
+                        .setTitle("ルーレット完成")
+                        .setMessage("ルーレットが完成しました")
+                        .setPositiveButton("ホームに戻る") { _, _ ->
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                            finish()
+                        }
+                        .show()
+                }
             }
         }
 

@@ -7,7 +7,7 @@
 <!--    android:background="#D3D3D3"-->
 
 
-    <TextView
+    <EditText
         android:id="@+id/comp_name"
         android:layout_width="180dp"
         android:layout_height="40dp"
@@ -20,9 +20,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:gravity="center"
+        android:inputType="textPersonName"
         android:textSize="20dp"/>
 
-    <TextView
+    <EditText
         android:id="@+id/comp_num1"
         android:layout_width="50dp"
         android:layout_height="40dp"
@@ -34,9 +35,10 @@
         app:layout_constraintStart_toEndOf="@+id/comp_name"
         app:layout_constraintTop_toTopOf="parent"
         android:gravity="center"
+        android:inputType="number"
         android:textSize="20dp"/>
 
-    <TextView
+    <EditText
         android:id="@+id/comp_num2"
         android:layout_width="50dp"
         android:layout_height="40dp"
@@ -49,6 +51,7 @@
         app:layout_constraintStart_toEndOf="@+id/comp_num1"
         app:layout_constraintTop_toTopOf="parent"
         android:gravity="center"
+        android:inputType="number"
         android:textSize="20dp"/>
 
     <View
