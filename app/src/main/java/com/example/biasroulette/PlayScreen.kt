@@ -3,6 +3,9 @@ package com.example.biasroulette
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.media.AudioAttributes
+import android.media.SoundPool
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -10,6 +13,7 @@ import android.view.animation.*
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
@@ -18,7 +22,12 @@ import kotlin.properties.Delegates
 
 
 class PlayScreen : AppCompatActivity() {
+    //        音源関係
+    lateinit var soundPool: SoundPool
+    var soundDrum = 0
+    var soundCymbal = 0
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +70,19 @@ class PlayScreen : AppCompatActivity() {
         val adRequest2 = AdRequest.Builder().build()
         adView2.loadAd(adRequest2)
 
+//        音源準備
+        val audioAttributes = AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_MEDIA)
+            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+            .build()
+        soundPool = SoundPool.Builder()
+            .setAudioAttributes(audioAttributes)
+            // ストリーム数に応じて
+            .setMaxStreams(2)
+            .build()
+        soundDrum = soundPool.load(this, R.raw.drum, 1)
+        soundCymbal = soundPool.load(this, R.raw.cymbal, 1)
+
 //        止まるボタンの無効化
         btnStop.isEnabled = false
         resultText.text = ""
@@ -68,6 +90,7 @@ class PlayScreen : AppCompatActivity() {
 //        回すボタン
         btnRotate.setOnClickListener {
             resultText.text = "抽選中"
+            val soundID = soundPool.play(soundDrum, 1.0f, 1.0f, 0, -1, 1.0f)
 
             //        通常回転系の定義
             val animSet0 = AnimationSet(true)
@@ -89,12 +112,15 @@ class PlayScreen : AppCompatActivity() {
             Handler().postDelayed( {
                 if(btnStop.isEnabled){
                     btnStop.performClick()
+                    soundPool.pause(soundID)
                 }
-            }, 5000)
+            }, 3000)
         }
 
 //        止めるボタン
         btnStop.setOnClickListener {
+            val soundID = soundPool.play(soundDrum, 1.0f, 1.0f, 0, -1, 1.0f)
+
             btnRotate.isEnabled = false
             btnStop.isEnabled = false
 
@@ -106,11 +132,11 @@ class PlayScreen : AppCompatActivity() {
             animSet1.fillAfter = true
             animSet1.isFillEnabled = true
             val animRotate1 = RotateAnimation(
-                0.0f, -7200.0f-pos,
+                0.0f, -5400.0f-pos,
                 RotateAnimation.RELATIVE_TO_SELF, 0.5f,
                 RotateAnimation.RELATIVE_TO_SELF, 0.5f
             )
-            animRotate1.duration = 5000
+            animRotate1.duration = 3000
             animRotate1.fillAfter = true
             animSet1.addAnimation(animRotate1)
 
@@ -118,7 +144,9 @@ class PlayScreen : AppCompatActivity() {
             Handler().postDelayed( {
                 resultText.text = name!![result].toString()
                 btnRotate.isEnabled = true
-            }, 5000)
+                soundPool.pause(soundID)
+                soundPool.play(soundCymbal, 1.0f, 1.0f, 1, 0, 1.0f)
+            }, 3000)
         }
 
 //        戻るボタン
@@ -126,6 +154,7 @@ class PlayScreen : AppCompatActivity() {
             intent = Intent(this, RouletteList::class.java)
             startActivity(intent)
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            soundPool.release()
             finish()
         }
 
