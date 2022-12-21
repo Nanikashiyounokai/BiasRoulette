@@ -37,7 +37,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.android.gms:play-services-ads:21.3.0'
+    implementation 'com.google.android.gms:play-services-ads:21.4.0'
 
     //implementation 'io.realm:android-adapters:2.1.1'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1" //20220916
@@ -54,6 +54,8 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1' //20220916
 
     implementation 'com.beardedhen:androidbootstrap:2.3.2'//20221110
+
+    implementation "androidx.multidex:multidex:2.0.1"//20221222
 
 
 }
