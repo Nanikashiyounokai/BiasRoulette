@@ -293,7 +293,7 @@ class PlayScreen : AppCompatActivity() {
         for ( tt in 0 until angleTypesNumber){
             resultDegreeList.add(beginningDeg + tt)
         }
-        Log.d("rDLa", resultDegreeList.toString())
+        Log.d("rDL", resultDegreeList.toString())
 
         return resultDegreeList.shuffled()[0]
     }
