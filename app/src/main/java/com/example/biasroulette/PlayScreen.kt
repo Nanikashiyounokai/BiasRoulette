@@ -238,6 +238,7 @@ class PlayScreen : AppCompatActivity() {
             sum = a.toFloat()
         }
 
+
         val a0 : Float = a/sum
         val b0 : Float? = b?.div(sum)
         val c0 : Float? = c?.div(sum)
@@ -284,12 +285,15 @@ class PlayScreen : AppCompatActivity() {
 
         val resultDegreeList : MutableList<Float> = mutableListOf()
         val beginningDeg : Float = degreeList[result]
+        Log.d("bD", beginningDeg.toString())
         val endDeg : Float = degreeList[result + 1]
+        Log.d("eD", endDeg.toString())
         val angleTypesNumber = ((endDeg - beginningDeg)).toInt()
-
-        for ( tt in 1 until angleTypesNumber){
+        Log.d("aTN", angleTypesNumber.toString())
+        for ( tt in 0 until angleTypesNumber){
             resultDegreeList.add(beginningDeg + tt)
         }
+        Log.d("rDL", resultDegreeList.toString())
 
         return resultDegreeList.shuffled()[0]
     }
