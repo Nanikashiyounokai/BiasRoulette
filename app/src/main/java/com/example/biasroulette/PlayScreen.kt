@@ -285,15 +285,18 @@ class PlayScreen : AppCompatActivity() {
 
         val resultDegreeList : MutableList<Float> = mutableListOf()
         val beginningDeg : Float = degreeList[result]
-        Log.d("bD", beginningDeg.toString())
+//        Log.d("bD", beginningDeg.toString())
+
         val endDeg : Float = degreeList[result + 1]
-        Log.d("eD", endDeg.toString())
-        val angleTypesNumber = ((endDeg - beginningDeg)).toInt()
-        Log.d("aTN", angleTypesNumber.toString())
+//        Log.d("eD", endDeg.toString())
+
+        val angleTypesNumber = (10 * (endDeg - beginningDeg)).toInt()
+//        Log.d("aTN", angleTypesNumber.toString())
+
         for ( tt in 0 until angleTypesNumber){
-            resultDegreeList.add(beginningDeg + tt)
+            resultDegreeList.add((beginningDeg + tt * 0.1).toFloat())
         }
-        Log.d("rDLa", resultDegreeList.toString())
+//        Log.d("rDLa", resultDegreeList.toString())
 
         return resultDegreeList.shuffled()[0]
     }
