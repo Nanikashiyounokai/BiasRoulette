@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.biasroulette">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
 
     <application
         android:name=".BiasRouletteApplication"
@@ -20,25 +20,28 @@
         tools:ignore="Instantiatable"
         tools:targetApi="31">
         <activity
-            android:name=".Method"
-            android:exported="false" />
-        <activity
             android:name=".RouletteImageMaker"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".EditRouletteActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".PlayScreen"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".Detail"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".RouletteList"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".NewRoulette"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <meta-data
@@ -47,6 +50,7 @@
 
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

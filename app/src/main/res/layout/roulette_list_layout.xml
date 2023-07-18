@@ -8,43 +8,49 @@
     <TextView
         android:id="@+id/name_tv"
         android:layout_width="180dp"
-        android:layout_height="80dp"
+        android:layout_height="100dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        android:textSize="30dp"
+        android:gravity="center"
+        android:text="@string/exsample"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/roulette_play_btn"
         android:layout_width="100dp"
-        android:layout_height="80dp"
+        android:layout_height="100dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="プレイ"
+        android:text="@string/play"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/name_tv"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextContrastCheck" />
 
     <Button
         android:id="@+id/roulette_edit_btn"
         android:layout_width="70dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="編集"
+        android:layout_height="48dp"
+        android:text="@string/edit"
+        app:layout_constraintBottom_toTopOf="@+id/roulette_delete_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/roulette_play_btn"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextContrastCheck" />
 
     <Button
         android:id="@+id/roulette_delete_btn"
         android:layout_width="70dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:text="消去"
+        android:layout_height="48dp"
+        android:text="@string/deletion"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/roulette_play_btn"
-        app:layout_constraintTop_toBottomOf="@+id/roulette_edit_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/roulette_edit_btn"
+        tools:ignore="TextContrastCheck" />
 
     <View
         android:id="@+id/divider"
@@ -53,6 +59,6 @@
         android:layout_marginTop="16dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/name_tv"
-        tools:layout_editor_absoluteX="1dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="1dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

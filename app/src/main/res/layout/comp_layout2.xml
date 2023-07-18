@@ -10,49 +10,53 @@
     <EditText
         android:id="@+id/comp_name"
         android:layout_width="180dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:background="@drawable/comp_flame"
         android:ems="10"
+        android:gravity="center"
+        android:inputType="textPersonName"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.019"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center"
-        android:inputType="textPersonName"
-        android:textSize="20dp"/>
+        tools:ignore="LabelFor,SpeakableTextPresentCheck"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/comp_num1"
         android:layout_width="50dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
         android:background="@drawable/comp_flame"
         android:ems="10"
-        app:layout_constraintStart_toEndOf="@+id/comp_name"
-        app:layout_constraintTop_toTopOf="parent"
         android:gravity="center"
         android:inputType="number"
-        android:textSize="20dp"/>
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/comp_name"
+        app:layout_constraintStart_toEndOf="@+id/comp_name"
+        app:layout_constraintTop_toTopOf="@+id/comp_name"
+        tools:ignore="LabelFor,SpeakableTextPresentCheck"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/comp_num2"
         android:layout_width="50dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
         android:background="@drawable/comp_flame2"
-        android:textColor="@color/white"
         android:ems="10"
-        app:layout_constraintStart_toEndOf="@+id/comp_num1"
-        app:layout_constraintTop_toTopOf="parent"
         android:gravity="center"
         android:inputType="number"
-        android:textSize="20dp"/>
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/comp_num1"
+        app:layout_constraintStart_toEndOf="@+id/comp_num1"
+        app:layout_constraintTop_toTopOf="@+id/comp_num1"
+        tools:ignore="LabelFor,SpeakableTextPresentCheck"
+        android:importantForAutofill="no" />
 
     <View
         android:id="@+id/divider3"
@@ -66,13 +70,14 @@
 
     <Button
         android:id="@+id/delete_btn"
-        android:layout_width="40dp"
+        android:layout_width="48dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:text="×"
-        android:textSize="20dp"
+        android:text="@string/no_r"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/comp_num2"
         app:layout_constraintStart_toEndOf="@+id/comp_num2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/comp_num2"
+        tools:ignore="TextContrastCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

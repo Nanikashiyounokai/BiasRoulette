@@ -1,5 +1,32 @@
 <resources>
     <string name="app_name">偏りルーレット</string>
     <string name="todo">TODO</string>
-    <string name="btn4">ルーレット一覧へ</string>
+    <string name="new_roulette_make">新規ルーレット作成</string>
+    <string name="roulette_list">ルーレット一覧</string>
+    <string name="detail">このアプリについて</string>
+    <string name="new_roulette_title">新規ルーレット作成</string>
+    <string name="new_roulette_name_hint">新規ルーレットの名前を入力</string>
+    <string name="item">項目</string>
+    <string name="ratio">比率</string>
+    <string name="second_ratio">裏比率</string>
+    <string name="item_name">項目名</string>
+    <string name="plus">＋</string>
+    <string name="complete">完成</string>
+    <string name="exsample">TextView</string>
+    <string name="play">プレイ</string>
+    <string name="edit">編集</string>
+    <string name="deletion">消去</string>
+    <string name="roulette_edit">ルーレットの編集</string>
+    <string name="roulette_name">ルーレットの名前を入力</string>
+    <string name="new_r">更新</string>
+    <string name="no_r">×</string>
+    <string name="go_roulette_list">ルーレット一覧へ</string>
+    <string name="roulette_name2">ルーレット名</string>
+    <string name="roulette_resalt">抽選結果</string>
+    <string name="route">回す</string>
+    <string name="stop">止める</string>
+    <string name="made_by">made by</string>
+    <string name="this_app">このアプリについて</string>
+    <string name="roulette_maker">ルーレットの作り方</string>
+    <string name="how_roulette">ルーレットの遊び方</string>
 </resources>

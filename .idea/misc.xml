@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
@@ -8,6 +7,7 @@
         <entry key="app/src/main/res/drawable/comp_flame.xml" value="0.1659637451171875" />
         <entry key="app/src/main/res/drawable/comp_flame2.xml" value="0.192" />
         <entry key="app/src/main/res/drawable/frame_style.xml" value="0.3325" />
+        <entry key="app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.2845" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.285" />
         <entry key="app/src/main/res/layout/activity_detail.xml" value="0.2776268115942029" />
         <entry key="app/src/main/res/layout/activity_edit.xml" value="0.26670722682980724" />
@@ -26,7 +26,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

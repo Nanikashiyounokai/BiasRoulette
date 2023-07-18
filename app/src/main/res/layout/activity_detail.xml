@@ -46,21 +46,11 @@
         app:srcCompat="@drawable/icon" />
 
     <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="379dp"
-        android:layout_height="441dp"
-        android:layout_marginTop="142dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/detail" />
-
-    <ImageView
         android:id="@+id/imageView"
         android:layout_width="60dp"
         android:layout_height="24dp"
         android:layout_marginBottom="85dp"
-        android:contentDescription="TODO"
+        android:contentDescription="@string/todo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,18 +62,19 @@
         android:layout_height="17dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="-5dp"
-        android:text="made by"
+        android:text="@string/made_by"
         android:textSize="10sp"
         app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="SmallSp" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
-        android:text="このアプリについて"
+        android:text="@string/this_app"
         android:textColor="#000000"
         android:textSize="34sp"
         android:textStyle="bold"
@@ -91,5 +82,59 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:contentDescription="@string/todo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:srcCompat="@drawable/experiment1" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/frame_style"
+        android:text="@string/roulette_maker"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        app:backgroundTint="#FFC089"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/frame_style"
+        android:text="@string/how_roulette"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        app:backgroundTint="#DEDEDE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:contentDescription="@string/todo"
+        app:layout_constraintBottom_toTopOf="@+id/textView11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button2"
+        app:srcCompat="@drawable/experiment2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

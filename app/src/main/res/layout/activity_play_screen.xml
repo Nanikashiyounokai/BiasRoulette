@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"
         app:adSize="BANNER"
         app:adUnitId="ca-app-pub-2529783942153390/1147578138"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,7 +24,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
         app:adSize="BANNER"
         app:adUnitId="ca-app-pub-2529783942153390/1147578138"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,65 +35,24 @@
         android:id="@+id/button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
         android:background="@drawable/frame_style"
-        android:text="@string/btn4"
+        android:text="@string/go_roulette_list"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="135dp"
-        android:layout_height="135dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="58dp"
-        android:contentDescription="@string/todo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon" />
-
-
-    <TextView
-        android:id="@+id/playRouletteName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="62dp"
-        android:text="ルーレット名"
-        android:textColor="#000000"
-        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/adView1play"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/resultText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="抽選結果"
-        android:textColor="#000000"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playRouletteName" />
-
+        app:layout_constraintTop_toBottomOf="@+id/btnRotate" />
 
     <FrameLayout
         android:id="@+id/fl"
         android:layout_width="wrap_content"
-        android:layout_height="450dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnRotate"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/divider2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resultText">
+        app:layout_constraintTop_toBottomOf="@+id/divider1">
 
         <ImageView
             android:id="@+id/image_view_2"
@@ -112,65 +69,109 @@
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:contentDescription="@string/todo"
-            android:translationY="30dp"
+            android:translationY="-20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/arrow1" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelinePercent"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.25" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineDpEnd"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="120dp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineDpTop"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="100dp" />
-
+            app:srcCompat="@drawable/arrow1"
+            tools:ignore="VisualLintBounds" />
 
     </FrameLayout>
 
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="135dp"
+        android:layout_height="135dp"
+        android:layout_marginStart="3dp"
+        android:contentDescription="@string/todo"
+        app:layout_constraintBottom_toTopOf="@+id/divider1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adView2play"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/icon" />
+
+
+    <TextView
+        android:id="@+id/playRouletteName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/roulette_name2"
+        android:textColor="#000000"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/resultText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adView2play" />
+
+    <TextView
+        android:id="@+id/resultText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/roulette_resalt"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/divider1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playRouletteName" />
 
 
     <Button
         android:id="@+id/btnRotate"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="120dp"
         android:background="@drawable/frame_style"
-        android:text="回す"
+        android:text="@string/route"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/adView1play"
+        app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toStartOf="@+id/btnStop"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
     <Button
         android:id="@+id/btnStop"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="120dp"
         android:background="@drawable/frame_style"
-        android:text="止める"
+        android:text="@string/stop"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/adView1play"
+        app:layout_constraintBottom_toBottomOf="@+id/btnRotate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnRotate" />
+        app:layout_constraintStart_toEndOf="@+id/btnRotate"
+        app:layout_constraintTop_toTopOf="@+id/btnRotate" />
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0"
+        android:background="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/adView1play"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adView2play"
+        app:layout_constraintVertical_bias="0.2" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0"
+        android:background="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/adView1play"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adView2play"
+        app:layout_constraintVertical_bias="0.8" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
