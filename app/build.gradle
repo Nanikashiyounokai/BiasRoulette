@@ -14,8 +14,8 @@ android {
         applicationId "com.skart.biasroulette"
         minSdk 19
         targetSdk 33
-        versionCode 4
-        versionName "1.3"
+        versionCode 5
+        versionName "1.4"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -60,7 +60,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-    implementation 'androidx.recyclerview:recyclerview:1.3.0' //20220916
+    implementation 'androidx.recyclerview:recyclerview:1.3.1' //20220916
 
     implementation 'com.beardedhen:androidbootstrap:2.3.2'//20221110
 
