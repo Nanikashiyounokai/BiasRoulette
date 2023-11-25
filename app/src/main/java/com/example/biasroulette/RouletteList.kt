@@ -1,8 +1,7 @@
 package com.example.biasroulette
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.AdRequest
@@ -10,8 +9,8 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import io.realm.Realm
 import io.realm.kotlin.where
-import org.bson.types.ObjectId
 
+@Suppress("LocalVariableName", "DEPRECATION")
 class RouletteList : AppCompatActivity() {
 
     private lateinit var realm: Realm

@@ -13,7 +13,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-2529783942153390/1147578138"
+        app:adUnitId="ca-app-pub-2149317250626507/2129548313"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -25,7 +25,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-2529783942153390/1147578138"
+        app:adUnitId="ca-app-pub-2149317250626507/2129548313"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,7 +89,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/adView2play"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/icon" />
+        app:srcCompat="@drawable/icon"
+        tools:ignore="ImageContrastCheck" />
 
 
     <TextView

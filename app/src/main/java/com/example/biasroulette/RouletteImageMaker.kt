@@ -16,6 +16,7 @@ import java.lang.Math.PI
 import kotlin.properties.Delegates
 
 
+@Suppress("LocalVariableName", "DEPRECATION")
 class RouletteImageMaker : AppCompatActivity() {
     private lateinit var realm: Realm
     @RequiresApi(Build.VERSION_CODES.O)

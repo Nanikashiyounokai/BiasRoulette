@@ -1,18 +1,14 @@
 package com.example.biasroulette
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doBeforeTextChanged
 import androidx.recyclerview.widget.RecyclerView
-import io.realm.Realm
-import io.realm.kotlin.where
 
+@Suppress("DEPRECATION", "PropertyName", "MemberVisibilityCanBePrivate")
 class CompDateAdapter(private val compDateList: ArrayList<CompData>, private val compDateList2: ArrayList<CompData2_2>) :RecyclerView.Adapter<CompDateAdapter.ViewHolderItem>() {
 
     //ViewHolder(インナークラス)
@@ -26,7 +22,6 @@ class CompDateAdapter(private val compDateList: ArrayList<CompData>, private val
             //デリートボタンが押されたら
             delete_btn.setOnClickListener {
                 val position:Int = adapterPosition
-                val listPosition = compDateList[position]
                 compDateList.removeAt(position)
                 compDateList2.removeAt(position)
                 rAdapter.notifyItemRemoved(position)

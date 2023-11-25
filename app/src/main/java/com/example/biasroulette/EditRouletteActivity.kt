@@ -20,6 +20,7 @@ import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
+@Suppress("NAME_SHADOWING", "LocalVariableName", "UselessCallOnNotNull", "DEPRECATION")
 class EditRouletteActivity : AppCompatActivity() {
 
     private lateinit var realm: Realm
@@ -56,7 +57,7 @@ class EditRouletteActivity : AppCompatActivity() {
 
         //RecyclerViewにアダプターとレイアウトマネージャーを設定する
         recyclerView = findViewById(R.id.EDcomp_rv)
-        var recyclerAdapter = CompDateAdapter2(addList2, addList)
+        val recyclerAdapter = CompDateAdapter2(addList2, addList)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = recyclerAdapter
 
@@ -77,7 +78,7 @@ class EditRouletteActivity : AppCompatActivity() {
         EDura_btn.setOnClickListener{
             if (n == 0) {
                 n = 1
-                var recyclerAdapter = CompDateAdapter(addList, addList2)
+                val recyclerAdapter = CompDateAdapter(addList, addList2)
                 recyclerView.adapter = recyclerAdapter
                 recyclerView.layoutManager = LinearLayoutManager(this)
                 recyclerAdapter.notifyItemInserted(addList.lastIndex)
@@ -92,7 +93,7 @@ class EditRouletteActivity : AppCompatActivity() {
 
             } else {
                 n = 0
-                var recyclerAdapter = CompDateAdapter2(addList2, addList)
+                val recyclerAdapter = CompDateAdapter2(addList2, addList)
                 recyclerView.adapter = recyclerAdapter
                 recyclerView.layoutManager = LinearLayoutManager(this)
                 recyclerAdapter.notifyItemInserted(addList2.lastIndex)
@@ -135,7 +136,7 @@ class EditRouletteActivity : AppCompatActivity() {
                         EDcomp_num1_et.text.toString())
                     addList2.add(data2)
 
-                    var recyclerAdapter = CompDateAdapter2(addList2, addList)
+                    val recyclerAdapter = CompDateAdapter2(addList2, addList)
                     recyclerView.adapter = recyclerAdapter
                     recyclerView.layoutManager = LinearLayoutManager(this)
                     recyclerAdapter.notifyItemInserted(addList2.lastIndex) //表示を更新(リストの最後に挿入)
@@ -171,7 +172,7 @@ class EditRouletteActivity : AppCompatActivity() {
 
                     addList2.add(data2)
 
-                    var recyclerAdapter = CompDateAdapter(addList, addList2)
+                    val recyclerAdapter = CompDateAdapter(addList, addList2)
                     recyclerView.adapter = recyclerAdapter
                     recyclerView.layoutManager = LinearLayoutManager(this)
                     recyclerAdapter.notifyItemInserted(addList.lastIndex) //表示を更新(リストの最後に挿入)
@@ -202,10 +203,9 @@ class EditRouletteActivity : AppCompatActivity() {
             }
 
             //Roulette(更新後)の保存
-            var comp_count = addList.size
+            val comp_count = addList.size
             //ルーレットの名前被りをなくすために、DBから全てのルーレット名を検索
-            val roulette_names = realm.where<RouletteName>().findAll()
-            var roulette_names_list = ArrayList<String>()
+            val roulette_names_list = ArrayList<String>()
             for (roulette in roulettes){
                 roulette_names_list.add(roulette.name)
             }
@@ -253,57 +253,61 @@ class EditRouletteActivity : AppCompatActivity() {
                     }
                 }
 
-                if(check == "False1"){
-                    AlertDialog.Builder(this)
-                        .setTitle("ERROR!!")
-                        .setMessage("項目に空欄があります")
-                        .setPositiveButton("OK",null)
-                        .show()
-                }else if(check == "False2") {
-                    AlertDialog.Builder(this)
-                        .setTitle("ERROR!!")
-                        .setMessage("比率は1から100の整数で入力してください")
-                        .setPositiveButton("OK",null)
-                        .show()
-                }else {
-                    //RouletteNameの保存
-                    realm.executeTransaction {
-                        //                db: Realm ->
-                        val maxId = realm.where<RouletteName>().max("id")
-                        val nextId = (maxId?.toLong() ?: 0L) + 1L
-                        val roulette_name = realm.createObject<RouletteName>(nextId)
-                        roulette_name.name = EDroulette_name_et.text.toString()
+                when (check) {
+                    "False1" -> {
+                        AlertDialog.Builder(this)
+                            .setTitle("ERROR!!")
+                            .setMessage("項目に空欄があります")
+                            .setPositiveButton("OK",null)
+                            .show()
                     }
-
-                    //Rouletteの保存
-                    for (data in addList) {
+                    "False2" -> {
+                        AlertDialog.Builder(this)
+                            .setTitle("ERROR!!")
+                            .setMessage("比率は1から100の整数で入力してください")
+                            .setPositiveButton("OK",null)
+                            .show()
+                    }
+                    else -> {
+                        //RouletteNameの保存
                         realm.executeTransaction {
                             //                db: Realm ->
-                            val maxId = realm.where<Roulette>().max("id")
+                            val maxId = realm.where<RouletteName>().max("id")
                             val nextId = (maxId?.toLong() ?: 0L) + 1L
-                            val roulette = realm.createObject<Roulette>(nextId)
-                            roulette.name = EDroulette_name_et.text.toString()
-                            roulette.comp_name = data.comp_name
-                            roulette.comp_num1 = data.comp_num1.toInt()
-                            roulette.comp_num2 = data.comp_num2.toInt()
+                            val roulette_name = realm.createObject<RouletteName>(nextId)
+                            roulette_name.name = EDroulette_name_et.text.toString()
                         }
+
+                        //Rouletteの保存
+                        for (data in addList) {
+                            realm.executeTransaction {
+                                //                db: Realm ->
+                                val maxId = realm.where<Roulette>().max("id")
+                                val nextId = (maxId?.toLong() ?: 0L) + 1L
+                                val roulette = realm.createObject<Roulette>(nextId)
+                                roulette.name = EDroulette_name_et.text.toString()
+                                roulette.comp_name = data.comp_name
+                                roulette.comp_num1 = data.comp_num1.toInt()
+                                roulette.comp_num2 = data.comp_num2.toInt()
+                            }
+                        }
+
+                        //top画面に戻る
+                        AlertDialog.Builder(this)
+                            .setTitle("ルーレット更新")
+                            .setMessage("ルーレットを更新しました")
+                            .setPositiveButton("ホームに戻る") { _, _ ->
+                                val intent = Intent(this, MainActivity::class.java)
+                                startActivity(intent)
+                                overridePendingTransition(
+                                    android.R.anim.fade_in,
+                                    android.R.anim.fade_out
+                                )
+                                finish()
+                            }
+                            .show()
+
                     }
-
-                    //top画面に戻る
-                    AlertDialog.Builder(this)
-                        .setTitle("ルーレット更新")
-                        .setMessage("ルーレットを更新しました")
-                        .setPositiveButton("ホームに戻る") { _, _ ->
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                            overridePendingTransition(
-                                android.R.anim.fade_in,
-                                android.R.anim.fade_out
-                            )
-                            finish()
-                        }
-                        .show()
-
                 }
             }
         }
@@ -320,14 +324,10 @@ class EditRouletteActivity : AppCompatActivity() {
     }
 
     private fun dpTopx(dp: Int): Float {
-        val metrics = getResources().getDisplayMetrics()
+        val metrics = resources.displayMetrics
         return dp * metrics.density
     }
 
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 
     override fun finish() {
         super.finish()

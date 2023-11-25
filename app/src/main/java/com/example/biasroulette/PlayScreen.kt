@@ -8,7 +8,7 @@ import android.media.SoundPool
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
+import android.os.Looper
 import android.view.animation.*
 import android.widget.Button
 import android.widget.ImageView
@@ -21,11 +21,12 @@ import com.google.android.gms.ads.MobileAds
 import kotlin.properties.Delegates
 
 
+@Suppress("LocalVariableName", "DEPRECATION")
 class PlayScreen : AppCompatActivity() {
     //        音源関係
-    lateinit var soundPool: SoundPool
-    var soundDrum = 0
-    var soundCymbal = 0
+    private lateinit var soundPool: SoundPool
+    private var soundDrum = 0
+    private var soundCymbal = 0
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint("ResourceType")
@@ -46,7 +47,7 @@ class PlayScreen : AppCompatActivity() {
         val In_rouletteName = intent.getStringExtra("ROULETTE_NAME")
 
         //定義したIn_rouletteNameをplay画面のrouletteNameという変数に代入。
-        rouletteName.setText(In_rouletteName)
+        rouletteName.text = In_rouletteName
 
         val name = intent.getStringArrayListExtra("name")
         val num1 = intent.getIntegerArrayListExtra("num1")
@@ -109,7 +110,7 @@ class PlayScreen : AppCompatActivity() {
             imageView2.startAnimation(animSet0)
             btnRotate.isEnabled = false
             btnStop.isEnabled = true
-            Handler().postDelayed( {
+            Handler(Looper.getMainLooper()).postDelayed( {
                 if(btnStop.isEnabled){
                     btnStop.performClick()
                     soundPool.pause(soundID)
@@ -141,7 +142,7 @@ class PlayScreen : AppCompatActivity() {
             animSet1.addAnimation(animRotate1)
 
             imageView2.startAnimation(animSet1)
-            Handler().postDelayed( {
+            Handler(Looper.getMainLooper()).postDelayed( {
                 resultText.text = name!![result].toString()
                 btnRotate.isEnabled = true
                 soundPool.pause(soundID)

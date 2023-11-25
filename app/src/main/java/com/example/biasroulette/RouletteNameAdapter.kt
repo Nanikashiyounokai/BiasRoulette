@@ -14,7 +14,8 @@ import io.realm.Realm
 import io.realm.RealmRecyclerViewAdapter
 import io.realm.kotlin.where
 
-class RouletteNameAdapter (data: OrderedRealmCollection<RouletteName>, ) :
+@Suppress("PropertyName", "LocalVariableName")
+class RouletteNameAdapter(data: OrderedRealmCollection<RouletteName>) :
     RealmRecyclerViewAdapter<RouletteName, RouletteNameAdapter.ViewHolder>(data, true) {
 
     private lateinit var realm: Realm //db関係
@@ -32,14 +33,14 @@ class RouletteNameAdapter (data: OrderedRealmCollection<RouletteName>, ) :
     }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RouletteNameAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.roulette_list_layout, parent, false)
-        return RouletteNameAdapter.ViewHolder(view)
+        return ViewHolder(view)
     }
 
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
-    override fun onBindViewHolder(holder: RouletteNameAdapter.ViewHolder, @SuppressLint("RecyclerView") position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, @SuppressLint("RecyclerView") position: Int) {
         realm = Realm.getDefaultInstance()
         val roulette_name: RouletteName? = getItem(position)
         holder.name.text = roulette_name?.name

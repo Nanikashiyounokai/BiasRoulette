@@ -4,12 +4,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doBeforeTextChanged
 import androidx.recyclerview.widget.RecyclerView
 
 
+@Suppress("DEPRECATION", "PropertyName", "MemberVisibilityCanBePrivate", "LocalVariableName")
 class CompDateAdapter2(private val compDateList2: ArrayList<CompData2_2>, private val compDateList: ArrayList<CompData>) :RecyclerView.Adapter<CompDateAdapter2.ViewHolderItem>() {
 
     //ViewHolder(インナークラス)
@@ -39,7 +38,7 @@ class CompDateAdapter2(private val compDateList2: ArrayList<CompData2_2>, privat
                 val data = CompData(
                     comp_name_holder.text.toString(),
                     comp_num1_holder.text.toString(),
-                    comp_num2.toString()
+                    comp_num2
                 )
                 compDateList.add(position, data)
 
@@ -60,7 +59,7 @@ class CompDateAdapter2(private val compDateList2: ArrayList<CompData2_2>, privat
                 val data = CompData(
                     comp_name_holder.text.toString(),
                     comp_num1_holder.text.toString(),
-                    comp_num2.toString()
+                    comp_num2
                 )
                 compDateList.add(position, data)
 

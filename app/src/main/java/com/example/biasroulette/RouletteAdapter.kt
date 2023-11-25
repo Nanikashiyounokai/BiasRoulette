@@ -7,11 +7,10 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import io.realm.OrderedRealmCollection
-import io.realm.Realm
 import io.realm.RealmRecyclerViewAdapter
 import io.realm.RealmResults
 
+@Suppress("PropertyName")
 class RouletteAdapter(data: RealmResults<Roulette>) :
     RealmRecyclerViewAdapter<Roulette, RouletteAdapter.ViewHolder>(data, true){
 

@@ -3,6 +3,7 @@ package com.example.biasroulette
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
+@Suppress("PropertyName")
 open class Roulette : RealmObject() {
     @PrimaryKey
     var id: Long = 0
