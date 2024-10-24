@@ -3,11 +3,13 @@ package com.example.biasroulette
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.*
-import android.os.Build
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import io.realm.Realm
 import io.realm.kotlin.where
@@ -19,7 +21,6 @@ import kotlin.properties.Delegates
 @Suppress("LocalVariableName", "DEPRECATION")
 class RouletteImageMaker : AppCompatActivity() {
     private lateinit var realm: Realm
-    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
