@@ -1,0 +1,92 @@
+{
+  "expo": {
+    "name": "偏りルーレット",
+    "slug": "bias-roulette",
+    "scheme": "biasroulette",
+    "version": "2.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "bundleIdentifier": "com.SKart.BiasRoulette-Storyboard",
+      "buildNumber": "1",
+      "supportsTablet": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "CFBundleLocalizations": [
+          "ja",
+          "en"
+        ],
+        "CFBundleAllowMixedLocalizations": true
+      }
+    },
+    "android": {
+      "package": "com.skart.biasroulette",
+      "versionCode": 14,
+      "adaptiveIcon": {
+        "backgroundColor": "#FFFFFF",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "blockedPermissions": [
+        "android.permission.READ_PHONE_STATE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "locales": {
+      "ja": "./locales/ja.json",
+      "en": "./locales/en.json"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-localization",
+      "expo-audio",
+      "expo-sharing",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 180,
+          "resizeMode": "contain",
+          "backgroundColor": "#FFFAF5"
+        }
+      ],
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-2149317250626507~3051268814",
+          "iosAppId": "ca-app-pub-2149317250626507~6355663977",
+          "delayAppMeasurementInit": true,
+          "userTrackingUsageDescription": "あなたに合った広告を表示するために使用します。"
+        }
+      ],
+      "./plugins/withAndroidGradleFixes",
+      [
+        "expo-tracking-transparency",
+        {
+          "userTrackingPermission": "あなたに合った広告を表示するために使用します。"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 29,
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true,
+            "extraProguardRules": "# realm-js の JNI から名前で参照されるクラス（R8 で消すと起動時に落ちる）\n-keep class io.realm.react.** { *; }\n"
+          }
+        }
+      ],
+      "expo-font",
+      "expo-asset"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

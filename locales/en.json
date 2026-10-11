@@ -1,0 +1,9 @@
+{
+  "ios": {
+    "CFBundleDisplayName": "Bias Roulette",
+    "NSUserTrackingUsageDescription": "This identifier is used to show ads that are more relevant to you."
+  },
+  "android": {
+    "app_name": "Bias Roulette"
+  }
+}

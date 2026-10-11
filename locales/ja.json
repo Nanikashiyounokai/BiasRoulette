@@ -1,0 +1,9 @@
+{
+  "ios": {
+    "CFBundleDisplayName": "偏りルーレット",
+    "NSUserTrackingUsageDescription": "あなたに合った広告を表示するために使用します。"
+  },
+  "android": {
+    "app_name": "偏りルーレット"
+  }
+}
