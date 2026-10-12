@@ -15,7 +15,7 @@ type Premium = {
   grandfathered: boolean;
   tickets: number;
   maxTickets: number;
-  /** ストア表示用の価格（例: ¥980） */
+  /** ストア表示用の価格（例: ¥1,000） */
   price: string;
   /** 課金が使える状態か（API キー設定済み・商品が取れた） */
   storeReady: boolean;
@@ -38,7 +38,7 @@ function hasEntitlement(info: CustomerInfo | null): boolean {
  * 買い切り（RevenueCat）とチケット（リワード広告）をまとめて扱う。
  *
  * 極端な確率（0%・100%・5% 未満・95% 超・21 項目以上）を回す方法:
- * - 買い切り ¥980 … ずっと使える。広告も消える
+ * - 買い切り ¥1,000 … ずっと使える。広告も消える
  * - チケット … リワード広告 1 本で 1 枚、最大 5 枚。プレイ画面に入って最初に回したときに 1 枚使い、画面を閉じるまで回し放題
  * - 旧版から引き継いだ人 … 旧版で無料だったので、ずっと使える（広告は出る）
  */

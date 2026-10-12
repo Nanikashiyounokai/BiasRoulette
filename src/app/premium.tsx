@@ -10,7 +10,7 @@ import { useTicketGate } from '../premium/useTicketGate';
 import { colors } from '../theme';
 
 /**
- * プレミアム（買い切り ¥980）とチケットの案内。
+ * プレミアム（買い切り ¥1,000）とチケットの案内。
  * RevenueCat の API キーが未設定のあいだは、買い切りボタンは「準備中」で押せない。
  */
 export default function Premium() {
