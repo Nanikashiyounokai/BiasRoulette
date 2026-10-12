@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AdsProvider } from '../ads/AdsProvider';
 import { t } from '../i18n';
+import { PremiumProvider } from '../premium/PremiumProvider';
 import { StoreProvider } from '../store';
 import { colors } from '../theme';
 
@@ -11,6 +12,7 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <StoreProvider>
+        <PremiumProvider>
         <AdsProvider>
           {/* 旧版はステータスバーの文字が白で、白背景に溶けて見えなかった */}
           <StatusBar style="dark" />
@@ -28,8 +30,10 @@ export default function RootLayout() {
             <Stack.Screen name="edit" options={{ title: '' }} />
             <Stack.Screen name="play/[id]" options={{ title: '' }} />
             <Stack.Screen name="settings" options={{ title: t('settings') }} />
+            <Stack.Screen name="premium" options={{ title: t('premium'), presentation: 'modal' }} />
           </Stack>
         </AdsProvider>
+        </PremiumProvider>
       </StoreProvider>
     </SafeAreaProvider>
   );

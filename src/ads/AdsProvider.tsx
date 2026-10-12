@@ -10,11 +10,14 @@ import mobileAds, {
   RewardedAdEventType,
 } from 'react-native-google-mobile-ads';
 
+import { usePremium } from '../premium/PremiumProvider';
 import { adUnits, interstitialPolicy } from './config';
 
 type Ads = {
   /** 同意の確認と SDK 初期化が済んだ */
   ready: boolean;
+  /** 買い切り購入済み。バナーを出さない */
+  adFree: boolean;
   /** プライバシー オプション フォームを出す必要がある地域か（EEA など） */
   privacyOptionsRequired: boolean;
   showPrivacyOptions: () => void;
@@ -37,6 +40,12 @@ export function AdsProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   const [privacyOptionsRequired, setPrivacyOptionsRequired] = useState(false);
   const [rewardedAvailable, setRewardedAvailable] = useState(false);
+  // 買い切りを買った人にはバナーもインタースティシャルも出さない（リワードは本人が選んだときだけなので残す）
+  const adFree = usePremium().purchased;
+  const adFreeRef = useRef(adFree);
+  useEffect(() => {
+    adFreeRef.current = adFree;
+  }, [adFree]);
 
   const launchedAt = useRef(0);
   const spinsSinceInterstitial = useRef(0);
@@ -110,6 +119,7 @@ export function AdsProvider({ children }: { children: ReactNode }) {
   const maybeShowInterstitial = useCallback(async () => {
     const now = Date.now();
     const p = interstitialPolicy;
+    if (adFreeRef.current) return;
     if (!interstitial.current || !interstitialLoaded.current) return;
     if (now - launchedAt.current < p.graceAfterLaunchMs) return;
     if (spinsSinceInterstitial.current < p.minSpinsBetween) return;
@@ -151,6 +161,7 @@ export function AdsProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       ready,
+      adFree,
       privacyOptionsRequired,
       showPrivacyOptions,
       recordSpin,
@@ -158,7 +169,7 @@ export function AdsProvider({ children }: { children: ReactNode }) {
       rewardedAvailable,
       showRewarded,
     }),
-    [ready, privacyOptionsRequired, showPrivacyOptions, recordSpin, maybeShowInterstitial, rewardedAvailable, showRewarded],
+    [ready, adFree, privacyOptionsRequired, showPrivacyOptions, recordSpin, maybeShowInterstitial, rewardedAvailable, showRewarded],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

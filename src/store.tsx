@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
 import type { Roulette } from './domain/roulette';
 import { importLegacyRoulettes } from './migration/legacy';
@@ -24,6 +24,18 @@ export type Settings = {
   legacyImportDone: boolean;
   spinCount: number;
   reviewRequestedAt?: number;
+  /** 編集画面の入力方法。既定は％（比率だと分からない人が多い） */
+  ratioDisplay: 'percent' | 'ratio';
+  /**
+   * 極端な確率のルーレットを 1 回使うためのチケット（リワード広告 1 本で 1 枚）。
+   * 人前で回す直前に広告を見せると「何か仕込んでる」と思われるので、事前に貯めておけるようにしている
+   */
+  tickets: number;
+  /**
+   * 旧版から引き継いだ人。旧版では裏比率 0 などが無料だったので、プレミアムを無期限で付ける。
+   * 取り上げると「前はできたのに」と評価が落ちる（★4 のレビューは裏設定を褒めている）
+   */
+  grandfathered: boolean;
 };
 
 const defaultSettings: Settings = {
@@ -33,6 +45,9 @@ const defaultSettings: Settings = {
   themeUnlocks: {},
   legacyImportDone: false,
   spinCount: 0,
+  ratioDisplay: 'percent',
+  tickets: 0,
+  grandfathered: false,
 };
 
 type Store = {
@@ -48,6 +63,8 @@ type Store = {
   /** リワード広告を見終えたテーマを ms だけ使えるようにする */
   unlockTheme: (themeId: string, ms: number) => void;
   remove: (id: string) => void;
+  /** チケットを増減する（0〜max に収める）。減らせなかったら false */
+  changeTickets: (delta: number, max: number) => boolean;
   updateSettings: (patch: Partial<Settings>) => void;
 };
 
@@ -74,6 +91,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           const imported = await importLegacyRoulettes(list.map((r) => r.name));
           list = [...imported, ...list];
           s.legacyImportDone = true;
+          if (imported.length > 0) s.grandfathered = true;
           setMigratedCount(imported.length);
           await AsyncStorage.multiSet([
             [KEY_ROULETTES, JSON.stringify(list)],
@@ -139,9 +157,36 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  // 連続で呼ばれても二重に使わないよう、最新の枚数は ref で持つ
+  const ticketsRef = useRef(defaultSettings.tickets);
+  useEffect(() => {
+    ticketsRef.current = settings.tickets;
+  }, [settings.tickets]);
+  const changeTickets = useCallback(
+    (delta: number, max: number) => {
+      const next = Math.min(max, ticketsRef.current + delta);
+      if (next < 0) return false;
+      ticketsRef.current = next;
+      updateSettings({ tickets: next });
+      return true;
+    },
+    [updateSettings],
+  );
+
   const value = useMemo(
-    () => ({ ready, roulettes, settings, migratedCount, upsert, markPlayed, unlockTheme, remove, updateSettings }),
-    [ready, roulettes, settings, migratedCount, upsert, markPlayed, unlockTheme, remove, updateSettings],
+    () => ({
+      ready,
+      roulettes,
+      settings,
+      migratedCount,
+      upsert,
+      markPlayed,
+      unlockTheme,
+      remove,
+      changeTickets,
+      updateSettings,
+    }),
+    [ready, roulettes, settings, migratedCount, upsert, markPlayed, unlockTheme, remove, changeTickets, updateSettings],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

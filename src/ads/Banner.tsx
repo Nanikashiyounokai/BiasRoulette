@@ -11,9 +11,9 @@ import { useAds } from './AdsProvider';
  * 旧版は固定サイズ 320x50 を上下 2 枚。上の 1 枚はステータスバーに潜っていた。
  */
 export function Banner() {
-  const { ready } = useAds();
+  const { ready, adFree } = useAds();
   const insets = useSafeAreaInsets();
-  if (!ready || !adUnits.banner) return <View style={{ height: insets.bottom }} />;
+  if (!ready || adFree || !adUnits.banner) return <View style={{ height: insets.bottom }} />;
   return (
     <View style={{ alignItems: 'center', paddingBottom: insets.bottom, backgroundColor: colors.bg }}>
       <BannerAd unitId={adUnits.banner} size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />

@@ -16,6 +16,8 @@ import { Wheel, itemColor } from '../../components/Wheel';
 import { Button } from '../../components/ui';
 import { draw, effectiveOdds, stopRotation, type Item } from '../../domain/roulette';
 import { t } from '../../i18n';
+import { usePremium } from '../../premium/PremiumProvider';
+import { useTicketGate } from '../../premium/useTicketGate';
 import { useRoulette, useStore } from '../../store';
 import { colors, readableTextColor } from '../../theme';
 import { useWheelPalette } from '../../useWheelPalette';
@@ -33,6 +35,8 @@ export default function Play() {
   const roulette = useRoulette(id);
   const { upsert, markPlayed, settings, updateSettings } = useStore();
   const ads = useAds();
+  const premium = usePremium();
+  const gate = useTicketGate();
   const palette = useWheelPalette();
   const { width, height } = useWindowDimensions();
 
@@ -43,6 +47,8 @@ export default function Play() {
   const [excluded, setExcluded] = useState<Set<string>>(new Set());
   const pending = useRef<{ index: number; target: number } | null>(null);
   const shotRef = useRef<View>(null);
+  // この画面にいるあいだはチケット 1 枚で回し放題
+  const ticketUsed = useRef(false);
 
   const drum = useAudioPlayer(require('../../../assets/sounds/drum.wav'));
   const cymbal = useAudioPlayer(require('../../../assets/sounds/cymbal.mp3'));
@@ -104,6 +110,14 @@ export default function Play() {
   };
 
   const spin = () => {
+    // チケットはホーム画面で確認済み。ここで足りないのは、入ったあとに裏設定を ON にした場合などだけ
+    if (premium.requiresTicket(roulette) && !ticketUsed.current) {
+      if (!premium.spendTicket()) {
+        gate.prompt();
+        return;
+      }
+      ticketUsed.current = true;
+    }
     let pool = roulette.items;
     let currentExcluded = excluded;
     if (roulette.removeWinners) {
@@ -145,7 +159,14 @@ export default function Play() {
   };
 
   const toggleSecret = () => {
-    upsert({ ...roulette, biasEnabled: !roulette.biasEnabled });
+    const next = { ...roulette, biasEnabled: !roulette.biasEnabled };
+    // チケットが無いのに極端な確率へ切り替えようとしたときは、何も表示せずに切り替えない（点の色が変わらないことで分かる）。
+    // 見ている人の前で案内を出すと、裏設定があることがばれる
+    if (premium.requiresTicket(next) && !ticketUsed.current && premium.tickets === 0) {
+      if (settings.haptics) Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+      return;
+    }
+    upsert(next);
     if (settings.haptics) Haptics.selectionAsync();
   };
 

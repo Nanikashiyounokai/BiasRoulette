@@ -8,6 +8,8 @@ import { Wheel } from '../components/Wheel';
 import { Button, Card, SectionTitle } from '../components/ui';
 import { newId, type Roulette } from '../domain/roulette';
 import { t } from '../i18n';
+import { usePremium } from '../premium/PremiumProvider';
+import { useTicketGate } from '../premium/useTicketGate';
 import { useStore } from '../store';
 import { templates } from '../templates';
 import { colors } from '../theme';
@@ -16,6 +18,8 @@ import { useWheelPalette } from '../useWheelPalette';
 export default function Home() {
   const { ready, roulettes, migratedCount, remove, upsert } = useStore();
   const palette = useWheelPalette();
+  const premium = usePremium();
+  const gate = useTicketGate();
   const [toastDismissed, setToastDismissed] = useState(false);
   const toast = migratedCount > 0 && !toastDismissed ? t('migrated', { n: migratedCount }) : null;
 
@@ -113,9 +117,23 @@ export default function Home() {
       <Stack.Screen
         options={{
           headerRight: () => (
-            <Pressable hitSlop={12} onPress={() => router.push('/settings')} accessibilityLabel={t('settings')}>
-              <Ionicons name="settings-outline" size={24} color={colors.primaryText} />
-            </Pressable>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
+              {!premium.unlimited && (
+                <Pressable
+                  hitSlop={8}
+                  onPress={() => router.push('/premium')}
+                  accessibilityLabel={t('tickets')}
+                  style={styles.ticketChip}
+                  testID="ticket-chip"
+                >
+                  <Ionicons name="ticket-outline" size={16} color={colors.primaryText} />
+                  <Text style={styles.ticketText}>{premium.tickets}</Text>
+                </Pressable>
+              )}
+              <Pressable hitSlop={12} onPress={() => router.push('/settings')} accessibilityLabel={t('settings')}>
+                <Ionicons name="settings-outline" size={24} color={colors.primaryText} />
+              </Pressable>
+            </View>
           ),
         }}
       />
@@ -127,7 +145,7 @@ export default function Home() {
         renderItem={({ item: r }) => (
           <Pressable
             testID={`roulette-${r.name}`}
-            onPress={() => router.push({ pathname: '/play/[id]', params: { id: r.id } })}
+            onPress={() => gate.openWithGate(r, () => router.push({ pathname: '/play/[id]', params: { id: r.id } }))}
             onLongPress={() => openMenu(r)}
             style={({ pressed }) => [pressed && { opacity: 0.8 }]}
           >
@@ -135,6 +153,7 @@ export default function Home() {
               <Wheel items={r.items} palette={palette} size={56} showPointer={false} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.rowTitle} numberOfLines={1}>
+                  {premium.requiresTicket(r) ? '👑 ' : ''}
                   {r.name}
                 </Text>
                 <Text style={styles.rowSub} numberOfLines={1}>
@@ -179,6 +198,16 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   rowTitle: { fontSize: 17, fontWeight: 'bold', color: colors.text },
   rowSub: { fontSize: 12, color: colors.subText, marginTop: 3 },
+  ticketChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 14,
+    backgroundColor: colors.primarySoft,
+  },
+  ticketText: { fontSize: 14, fontWeight: 'bold', color: colors.primaryText },
   toast: {
     position: 'absolute',
     left: 16,

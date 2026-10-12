@@ -4,8 +4,12 @@ import {
   newRoulette,
   parseRatio,
   percentages,
+  FREE_MAX_EVEN_ITEMS,
+  needsPremium,
+  premiumItemIndexes,
   sliceAngles,
   stopRotation,
+  toPercentInts,
   validate,
   type Item,
 } from './roulette';
@@ -110,5 +114,37 @@ describe('validate', () => {
     const r = base();
     r.items[1].weight = 0;
     expect(validate(r, [])).toEqual({ kind: 'invalidWeight', index: 1 });
+  });
+});
+
+describe('toPercentInts', () => {
+  it('合計がちょうど 100 になる', () => {
+    expect(toPercentInts([1, 1, 1])).toEqual([34, 33, 33]);
+    expect(toPercentInts([1, 2])).toEqual([33, 67]);
+    expect(toPercentInts([50, 50])).toEqual([50, 50]);
+    const many = toPercentInts(Array.from({ length: 30 }, (_, i) => i + 1));
+    expect(many.reduce((s, v) => s + v, 0)).toBe(100);
+  });
+  it('0 より大きい値は 0% にしない・0 は 0% のまま', () => {
+    expect(toPercentInts([1, 100, 100, 0])).toEqual([1, 50, 49, 0]);
+    expect(toPercentInts([0, 3])).toEqual([0, 100]);
+  });
+});
+
+describe('premiumItemIndexes', () => {
+  const r = (pairs: [number, number][], biasEnabled = true) => ({ biasEnabled, items: items(pairs) });
+  const even = (n: number) => r(Array.from({ length: n }, () => [1, 1] as [number, number]));
+  it('実際の確率が 5% 未満・95% 超（0%・100% を含む）の項目が対象', () => {
+    expect(premiumItemIndexes(r([[50, 0], [50, 100]]))).toEqual([0, 1]);
+    expect(premiumItemIndexes(r([[50, 4], [50, 96]]))).toEqual([0, 1]);
+    expect(premiumItemIndexes(r([[50, 5], [50, 95]]))).toEqual([]);
+  });
+  it('等分なら 20 項目まで無料・21 項目から対象', () => {
+    expect(needsPremium(even(FREE_MAX_EVEN_ITEMS))).toBe(false);
+    expect(needsPremium(even(FREE_MAX_EVEN_ITEMS + 1))).toBe(true);
+  });
+  it('裏設定 OFF でも見た目の確率で判定する', () => {
+    expect(premiumItemIndexes(r([[50, 0], [50, 100]], false))).toEqual([]);
+    expect(premiumItemIndexes(r([[97, 50], [3, 50]], false))).toEqual([0, 1]);
   });
 });

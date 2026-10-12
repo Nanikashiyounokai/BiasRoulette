@@ -123,6 +123,68 @@ export function percentages(values: number[]): number[] {
   return values.map((v) => (total > 0 ? (Math.max(0, v) / total) * 100 : 0));
 }
 
+/**
+ * 合計がちょうど 100 になる整数のパーセントに直す（最大剰余法）。
+ *
+ * 編集画面の「％表示」で使う。比率 1:1:1 は 34/33/33 になる。
+ * 0 より大きい値は 1 未満に丸めない（1 が 0% に化けると「絶対に当たらない」に変わってしまう）。
+ * 合計が 0 のときはそのまま返す。
+ */
+export function toPercentInts(values: number[]): number[] {
+  const vs = values.map((v) => Math.max(0, v));
+  const total = vs.reduce((s, v) => s + v, 0);
+  if (total <= 0) return vs.slice();
+  const raw = vs.map((v) => (v / total) * 100);
+  const out = raw.map((r, i) => (vs[i] > 0 ? Math.max(1, Math.floor(r)) : 0));
+  let diff = 100 - out.reduce((s, v) => s + v, 0);
+  // 足りない分は端数の大きい順に、多すぎる分は端数の小さい順（かつ 1 より大きいもの）から引く
+  const order = raw.map((r, i) => ({ i, frac: r - Math.floor(r) }));
+  order.sort((a, b) => b.frac - a.frac || a.i - b.i);
+  for (let k = 0; diff > 0; k = (k + 1) % order.length) {
+    const { i } = order[k];
+    if (vs[i] > 0) {
+      out[i] += 1;
+      diff -= 1;
+    }
+  }
+  for (let k = order.length - 1; diff < 0; k = (k - 1 + order.length) % order.length) {
+    const { i } = order[k];
+    if (out[i] > 1) {
+      out[i] -= 1;
+      diff += 1;
+    }
+  }
+  return out;
+}
+
+/**
+ * 実際の当選確率がこの範囲の外に出る項目があるルーレットは、回すのにプレミアム（買い切り）かチケットが要る。
+ * 0%（絶対に当たらない）と 100%（必ず当たる）も含む。
+ * 境界ちょうど（5% / 95%）は無料。等分なら 20 項目（各 5%）まで無料、21 項目からプレミアムになる。
+ */
+export const PREMIUM_LOW_PCT = 5;
+export const PREMIUM_HIGH_PCT = 95;
+/** 等分のときに無料で使える項目数（100 / PREMIUM_LOW_PCT） */
+export const FREE_MAX_EVEN_ITEMS = Math.floor(100 / PREMIUM_LOW_PCT);
+
+/**
+ * プレミアムが要る項目の添字。
+ * 裏設定の有無にかかわらず「実際に抽選される確率」で判定する（項目を増やして 5% 未満にした場合も対象）。
+ */
+export function premiumItemIndexes(roulette: Pick<Roulette, 'biasEnabled' | 'items'>): number[] {
+  const real = percentages(effectiveOdds(roulette, roulette.items));
+  const eps = 1e-9;
+  const out: number[] = [];
+  real.forEach((r, i) => {
+    if (r < PREMIUM_LOW_PCT - eps || r > PREMIUM_HIGH_PCT + eps) out.push(i);
+  });
+  return out;
+}
+
+export function needsPremium(roulette: Pick<Roulette, 'biasEnabled' | 'items'>): boolean {
+  return premiumItemIndexes(roulette).length > 0;
+}
+
 export type ValidationError =
   | { kind: 'emptyName' }
   | { kind: 'duplicateName' }
