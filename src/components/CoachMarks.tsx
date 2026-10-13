@@ -123,7 +123,7 @@ export function CoachMarks({ id, steps, enabled = true }: { id: string; steps: C
 
 const styles = StyleSheet.create({
   dim: { position: 'absolute', backgroundColor: 'rgba(28,18,10,0.72)' },
-  ring: { position: 'absolute', borderRadius: 14, borderWidth: 2, borderColor: colors.primarySoft },
+  ring: { position: 'absolute', borderRadius: 6, borderWidth: 2, borderColor: colors.primarySoft },
   card: {
     position: 'absolute',
     left: 16,
