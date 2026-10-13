@@ -1,4 +1,3 @@
-import { router } from 'expo-router';
 import { useCallback } from 'react';
 import { Alert } from 'react-native';
 
@@ -12,7 +11,7 @@ import { usePremium } from './PremiumProvider';
  *
  * チケットを持っていれば何も聞かずに進む（使うのはプレイ画面で最初に回したとき）。
  * 持っていなければ、ホーム画面などプレイ画面に入る前にだけ聞く。人前で回している最中に
- * 課金や広告の案内が出ると、裏で何か仕込んでいるのが見ている人に分かってしまうため。
+ * 広告の案内が出ると、裏で何か仕込んでいるのが見ている人に分かってしまうため。
  */
 export function useTicketGate() {
   const ads = useAds();
@@ -20,10 +19,6 @@ export function useTicketGate() {
 
   /** リワード広告を見てチケットを 1 枚もらう */
   const earnTicket = useCallback(async () => {
-    if (premium.tickets >= premium.maxTickets) {
-      Alert.alert(t('ticketFull', { n: premium.maxTickets }));
-      return false;
-    }
     const earned = await ads.showRewarded();
     if (!earned) {
       Alert.alert(t('rewardFailed'));
@@ -41,13 +36,6 @@ export function useTicketGate() {
         [
           { text: t('cancel'), style: 'cancel', onPress: onCancel },
           {
-            text: t('buyLifetime', { price: premium.price }),
-            onPress: () => {
-              onCancel?.();
-              router.push('/premium');
-            },
-          },
-          {
             text: t('earnTicket'),
             onPress: async () => {
               if (await earnTicket()) onReady?.();
@@ -57,7 +45,7 @@ export function useTicketGate() {
         ],
         { cancelable: true, onDismiss: onCancel },
       ),
-    [premium.price, earnTicket],
+    [earnTicket],
   );
 
   /** 回せる状態ならすぐ onReady。チケットが足りなければ案内を出す */

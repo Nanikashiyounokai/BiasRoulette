@@ -11,7 +11,6 @@ import { Card, SectionTitle } from '../components/ui';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { t } from '../i18n';
-import { usePremium } from '../premium/PremiumProvider';
 import { useStore } from '../store';
 import { colors, wheelThemes } from '../theme';
 import { useNow } from '../useNow';
@@ -26,13 +25,12 @@ const OTHER_APPS =
 export default function Settings() {
   const { settings, updateSettings, unlockTheme } = useStore();
   const ads = useAds();
-  const premium = usePremium();
   const insets = useSafeAreaInsets();
   const now = useNow();
 
   const selectTheme = async (id: string, isPremiumTheme: boolean) => {
     const unlockedUntil = settings.themeUnlocks[id] ?? 0;
-    if (!isPremiumTheme || unlockedUntil > now || premium.purchased) {
+    if (!isPremiumTheme || unlockedUntil > now) {
       updateSettings({ themeId: id });
       return;
     }
@@ -50,7 +48,7 @@ export default function Settings() {
       <View style={styles.themes}>
         {wheelThemes.map((th) => {
           const until = settings.themeUnlocks[th.id] ?? 0;
-          const locked = th.premium && until <= now && !premium.purchased;
+          const locked = th.premium && until <= now;
           const selected = settings.themeId === th.id && !locked;
           return (
             <Pressable
@@ -61,7 +59,7 @@ export default function Settings() {
             >
               <Wheel items={PREVIEW_ITEMS} palette={th.palette} size={64} showPointer={false} />
               <Text style={styles.themeName}>{t(`themeNames_${th.id}` as 'themeNames_classic')}</Text>
-              {th.premium && !premium.purchased && (
+              {th.premium && (
                 <Text style={styles.themeSub} numberOfLines={2}>
                   {locked
                     ? `▶ ${t('themeLocked')}`
@@ -82,7 +80,7 @@ export default function Settings() {
 
       <SectionTitle>{t('premium')}</SectionTitle>
       <Card>
-        <LinkRow label={`👑 ${t('premiumTitle')}`} onPress={() => router.push('/premium')} />
+        <LinkRow label={t('premiumTitle')} onPress={() => router.push('/premium')} />
       </Card>
 
       <SectionTitle>{t('settings')}</SectionTitle>

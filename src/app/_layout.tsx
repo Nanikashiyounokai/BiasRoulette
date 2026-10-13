@@ -30,7 +30,7 @@ export default function RootLayout() {
             <Stack.Screen name="edit" options={{ title: '' }} />
             <Stack.Screen name="play/[id]" options={{ title: '' }} />
             <Stack.Screen name="settings" options={{ title: t('settings') }} />
-            <Stack.Screen name="premium" options={{ title: t('premium'), presentation: 'modal' }} />
+            <Stack.Screen name="premium" options={{ title: t('ticketsAndAds'), presentation: 'modal' }} />
           </Stack>
         </AdsProvider>
         </PremiumProvider>

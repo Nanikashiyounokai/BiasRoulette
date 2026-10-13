@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -14,6 +14,7 @@ import {
   View,
 } from 'react-native';
 
+import { CoachMarks } from '../components/CoachMarks';
 import { Wheel, itemColor } from '../components/Wheel';
 import { Button, Card, SectionTitle } from '../components/ui';
 import {
@@ -99,6 +100,8 @@ export default function Edit() {
   const { roulettes, upsert, settings, updateSettings } = useStore();
   const premium = usePremium();
   const gate = useTicketGate();
+  const modeRef = useRef<View>(null);
+  const lockRef = useRef<View>(null);
   const palette = useWheelPalette();
   const mode = settings.ratioDisplay;
   const insets = useSafeAreaInsets();
@@ -144,7 +147,7 @@ export default function Edit() {
   const lookPct = percentages(parsed.map((it) => it.weight));
   const realPct = percentages(parsed.map((it) => (biasEnabled ? Math.max(it.bias, 0) : it.weight)));
   const premiumIdx = new Set(premiumItemIndexes({ biasEnabled, items: parsed }));
-  const needsTicket = premiumIdx.size > 0 && !premium.unlimited;
+  const needsTicket = premiumIdx.size > 0;
   const sum = (vs: number[]) => vs.reduce((s, v) => s + Math.max(0, v), 0);
   const weightTotal = sum(parsed.map((it) => it.weight));
   const biasTotal = sum(parsed.map((it) => it.bias));
@@ -280,7 +283,7 @@ export default function Edit() {
 
         <View style={styles.modeRow}>
           <Text style={styles.colLabel}>{t('inputBy')}</Text>
-          <View style={styles.segment}>
+          <View style={styles.segment} ref={modeRef} collapsable={false}>
             {(['percent', 'ratio'] as const).map((m) => (
               <Pressable
                 key={m}
@@ -302,6 +305,7 @@ export default function Edit() {
           <Text style={[styles.colLabel, styles.numCol]}>{t('weight')}</Text>
           {showSecret && <Text style={[styles.colLabel, styles.numCol, { color: colors.secret }]}>{t('bias')}</Text>}
           <Pressable
+            ref={lockRef}
             testID="toggle-secret"
             onPress={() => setShowSecret((v) => !v)}
             hitSlop={8}
@@ -353,9 +357,7 @@ export default function Edit() {
                     : `${lookPct[i].toFixed(0)}%`)}
                 {mode === 'ratio' && premiumIdx.has(i) && '　'}
                 {premiumIdx.has(i) && (
-                  <Text style={{ color: premium.unlimited ? colors.subText : colors.primary, fontWeight: 'bold' }}>
-                    {t('premiumBadge')}
-                  </Text>
+                  <Text style={{ color: colors.primary, fontWeight: 'bold' }}>{t('ticketBadge')}</Text>
                 )}
               </Text>
             )}
@@ -397,7 +399,7 @@ export default function Edit() {
           </View>
         )}
 
-        {items.length >= FREE_MAX_EVEN_ITEMS && !premium.unlimited && (
+        {items.length >= FREE_MAX_EVEN_ITEMS && (
           <Text style={[styles.hint, { marginTop: 8 }]}>
             {t('manyItemsHint', { n: FREE_MAX_EVEN_ITEMS + 1, low: PREMIUM_LOW_PCT })}
           </Text>
@@ -454,18 +456,21 @@ export default function Edit() {
                 }}
                 style={{ flexGrow: 1 }}
               />
-              <Button
-                title={t('buyLifetime', { price: premium.price })}
-                variant="ghost"
-                onPress={() => router.push('/premium')}
-                style={{ flexGrow: 1 }}
-              />
             </View>
           </Card>
         )}
 
         <Button title={t('save')} onPress={save} style={{ marginTop: 24 }} testID="save-bottom" />
       </ScrollView>
+      <CoachMarks
+        id="edit"
+        steps={[
+          { target: modeRef, title: t('coachModeTitle'), body: t('coachModeBody') },
+          { target: lockRef, title: t('coachLockTitle'), body: t('coachLockBody') },
+          // プレイ画面では出さない（人前で回しているときに裏設定の説明が出ると、仕込みがばれる）
+          { title: t('coachToggleTitle'), body: t('coachToggleBody') },
+        ]}
+      />
     </KeyboardAvoidingView>
   );
 }

@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router, Stack } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { Banner } from '../ads/Banner';
+import { CoachMarks } from '../components/CoachMarks';
 import { Wheel } from '../components/Wheel';
 import { Button, Card, SectionTitle } from '../components/ui';
 import { newId, type Roulette } from '../domain/roulette';
@@ -20,6 +21,9 @@ export default function Home() {
   const palette = useWheelPalette();
   const premium = usePremium();
   const gate = useTicketGate();
+  const newRef = useRef<View>(null);
+  const tplRef = useRef<View>(null);
+  const ticketRef = useRef<View>(null);
   const [toastDismissed, setToastDismissed] = useState(false);
   const toast = migratedCount > 0 && !toastDismissed ? t('migrated', { n: migratedCount }) : null;
 
@@ -81,13 +85,16 @@ export default function Home() {
           <Text style={styles.heroSub}>{t('tagline')}</Text>
         </View>
       </View>
+      <View ref={newRef} collapsable={false}>
       <Button
         testID="new-roulette"
         title={t('newRoulette')}
         icon={<Ionicons name="add" size={22} color="#FFFFFF" />}
         onPress={() => router.push('/edit')}
       />
+      </View>
       <SectionTitle>{t('templates')}</SectionTitle>
+      <View ref={tplRef} collapsable={false}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
         {templates.map((tpl, i) => (
           <Pressable
@@ -95,13 +102,16 @@ export default function Home() {
             style={({ pressed }) => [styles.template, pressed && { opacity: 0.7 }]}
             onPress={() => router.push({ pathname: '/edit', params: { template: String(i) } })}
           >
-            <Text style={{ fontSize: 22 }}>{tpl.emoji}</Text>
+            <View style={styles.templateIcon}>
+              <Ionicons name={tpl.icon} size={20} color={colors.primary} />
+            </View>
             <Text style={styles.templateText} numberOfLines={1}>
               {tpl.name}
             </Text>
           </Pressable>
         ))}
       </ScrollView>
+      </View>
       <SectionTitle>{t('myRoulettes')}</SectionTitle>
       {ready && sorted.length === 0 && (
         <Card style={{ alignItems: 'center', paddingVertical: 28 }}>
@@ -118,8 +128,8 @@ export default function Home() {
         options={{
           headerRight: () => (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
-              {!premium.unlimited && (
-                <Pressable
+              <Pressable
+                  ref={ticketRef}
                   hitSlop={8}
                   onPress={() => router.push('/premium')}
                   accessibilityLabel={t('tickets')}
@@ -129,7 +139,6 @@ export default function Home() {
                   <Ionicons name="ticket-outline" size={16} color={colors.primaryText} />
                   <Text style={styles.ticketText}>{premium.tickets}</Text>
                 </Pressable>
-              )}
               <Pressable hitSlop={12} onPress={() => router.push('/settings')} accessibilityLabel={t('settings')}>
                 <Ionicons name="settings-outline" size={24} color={colors.primaryText} />
               </Pressable>
@@ -152,10 +161,14 @@ export default function Home() {
             <Card style={styles.row}>
               <Wheel items={r.items} palette={palette} size={56} showPointer={false} />
               <View style={{ flex: 1 }}>
-                <Text style={styles.rowTitle} numberOfLines={1}>
-                  {premium.requiresTicket(r) ? '👑 ' : ''}
-                  {r.name}
-                </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                  {premium.requiresTicket(r) && (
+                    <Ionicons name="ticket-outline" size={15} color={colors.primary} accessibilityLabel={t('ticketBadge')} />
+                  )}
+                  <Text style={[styles.rowTitle, { flexShrink: 1 }]} numberOfLines={1}>
+                    {r.name}
+                  </Text>
+                </View>
                 <Text style={styles.rowSub} numberOfLines={1}>
                   {r.items.length} {t('items')}・{r.items.map((i) => i.name).join(' / ')}
                 </Text>
@@ -173,6 +186,15 @@ export default function Home() {
         </View>
       )}
       <Banner />
+      <CoachMarks
+        id="home"
+        steps={[
+          { target: newRef, title: t('coachNewTitle'), body: t('coachNewBody') },
+          { target: tplRef, title: t('coachTplTitle'), body: t('coachTplBody') },
+          { target: ticketRef, title: t('coachTicketTitle'), body: t('coachTicketBody') },
+          { title: t('coachSecretTitle'), body: t('coachSecretBody') },
+        ]}
+      />
     </View>
   );
 }
@@ -191,6 +213,14 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     alignItems: 'center',
     gap: 4,
+  },
+  templateIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.bg,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   templateText: { fontSize: 13, color: colors.text },
   emptyTitle: { fontSize: 16, fontWeight: 'bold', color: colors.text },

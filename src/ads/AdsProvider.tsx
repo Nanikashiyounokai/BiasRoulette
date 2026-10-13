@@ -41,7 +41,7 @@ export function AdsProvider({ children }: { children: ReactNode }) {
   const [privacyOptionsRequired, setPrivacyOptionsRequired] = useState(false);
   const [rewardedAvailable, setRewardedAvailable] = useState(false);
   // 買い切りを買った人にはバナーもインタースティシャルも出さない（リワードは本人が選んだときだけなので残す）
-  const adFree = usePremium().purchased;
+  const adFree = usePremium().adFree;
   const adFreeRef = useRef(adFree);
   useEffect(() => {
     adFreeRef.current = adFree;

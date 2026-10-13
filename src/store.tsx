@@ -31,11 +31,8 @@ export type Settings = {
    * 人前で回す直前に広告を見せると「何か仕込んでる」と思われるので、事前に貯めておけるようにしている
    */
   tickets: number;
-  /**
-   * 旧版から引き継いだ人。旧版では裏比率 0 などが無料だったので、プレミアムを無期限で付ける。
-   * 取り上げると「前はできたのに」と評価が落ちる（★4 のレビューは裏設定を褒めている）
-   */
-  grandfathered: boolean;
+  /** 見終えたコーチマーク（画面 ID → true） */
+  coachSeen: Record<string, boolean>;
 };
 
 const defaultSettings: Settings = {
@@ -47,7 +44,7 @@ const defaultSettings: Settings = {
   spinCount: 0,
   ratioDisplay: 'percent',
   tickets: 0,
-  grandfathered: false,
+  coachSeen: {},
 };
 
 type Store = {
@@ -63,8 +60,8 @@ type Store = {
   /** リワード広告を見終えたテーマを ms だけ使えるようにする */
   unlockTheme: (themeId: string, ms: number) => void;
   remove: (id: string) => void;
-  /** チケットを増減する（0〜max に収める）。減らせなかったら false */
-  changeTickets: (delta: number, max: number) => boolean;
+  /** チケットを増減する（上限なし）。0 を下回るなら何もせず false */
+  changeTickets: (delta: number) => boolean;
   updateSettings: (patch: Partial<Settings>) => void;
 };
 
@@ -91,7 +88,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           const imported = await importLegacyRoulettes(list.map((r) => r.name));
           list = [...imported, ...list];
           s.legacyImportDone = true;
-          if (imported.length > 0) s.grandfathered = true;
           setMigratedCount(imported.length);
           await AsyncStorage.multiSet([
             [KEY_ROULETTES, JSON.stringify(list)],
@@ -163,8 +159,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     ticketsRef.current = settings.tickets;
   }, [settings.tickets]);
   const changeTickets = useCallback(
-    (delta: number, max: number) => {
-      const next = Math.min(max, ticketsRef.current + delta);
+    (delta: number) => {
+      const next = ticketsRef.current + delta;
       if (next < 0) return false;
       ticketsRef.current = next;
       updateSettings({ tickets: next });

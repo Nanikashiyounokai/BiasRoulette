@@ -3,28 +3,26 @@ import Purchases, { type CustomerInfo, type PurchasesPackage } from 'react-nativ
 
 import { needsPremium, type Roulette } from '../domain/roulette';
 import { useStore } from '../store';
-import { ENTITLEMENT_ID, FALLBACK_PRICE, LIFETIME_PRODUCT_ID, MAX_TICKETS, revenueCatApiKey } from './config';
+import { ENTITLEMENT_ID, FALLBACK_PRICE, MONTHLY_PRODUCT_ID, revenueCatApiKey } from './config';
 
 type PurchaseResult = 'purchased' | 'cancelled' | 'failed' | 'unavailable';
 
 type Premium = {
-  /** 買い切りを購入済み（広告も消える） */
-  purchased: boolean;
-  /** 極端な確率をチケットなしで使える（購入済み or 旧版からの引き継ぎ） */
-  unlimited: boolean;
-  grandfathered: boolean;
+  /** 広告削除（月額）を契約中 */
+  adFree: boolean;
   tickets: number;
-  maxTickets: number;
-  /** ストア表示用の価格（例: ¥1,000） */
+  /** ストア表示用の価格（例: ¥300） */
   price: string;
   /** 課金が使える状態か（API キー設定済み・商品が取れた） */
   storeReady: boolean;
+  /** 契約の管理（解約）ページ。ストアから取れたときだけ */
+  managementUrl: string | null;
   purchase: () => Promise<PurchaseResult>;
   restore: () => Promise<boolean>;
   addTicket: () => boolean;
   /** チケットを 1 枚使う。持っていなければ false */
   spendTicket: () => boolean;
-  /** このルーレットを回すのにチケットが要るか（チケット不要の人は常に false） */
+  /** このルーレットを回すのにチケットが要るか */
   requiresTicket: (r: Pick<Roulette, 'biasEnabled' | 'items'>) => boolean;
 };
 
@@ -35,12 +33,13 @@ function hasEntitlement(info: CustomerInfo | null): boolean {
 }
 
 /**
- * 買い切り（RevenueCat）とチケット（リワード広告）をまとめて扱う。
+ * 広告削除のサブスクリプション（RevenueCat）とチケット（リワード広告）をまとめて扱う。
  *
- * 極端な確率（0%・100%・5% 未満・95% 超・21 項目以上）を回す方法:
- * - 買い切り ¥1,000 … ずっと使える。広告も消える
- * - チケット … リワード広告 1 本で 1 枚、最大 5 枚。プレイ画面に入って最初に回したときに 1 枚使い、画面を閉じるまで回し放題
- * - 旧版から引き継いだ人 … 旧版で無料だったので、ずっと使える（広告は出る）
+ * 2026-10-13 報告会の決定:
+ * - 極端な確率（0%・100%・5% 未満・95% 超・21 項目以上）は課金せず、チケットだけで解放する。
+ *   リワード広告 1 本で 1 枚、何枚でも貯められる。プレイ画面で最初に回したときに 1 枚使い、閉じるまで回し放題
+ * - 課金は広告削除の月額 ¥300。バナーとインタースティシャルが消える（リワードは本人が選んだときだけなので残る）
+ * - 旧版の利用者も特別扱いしない
  */
 export function PremiumProvider({ children }: { children: ReactNode }) {
   const { settings, changeTickets } = useStore();
@@ -59,7 +58,7 @@ export function PremiumProvider({ children }: { children: ReactNode }) {
         setInfo(await Purchases.getCustomerInfo());
         const offerings = await Purchases.getOfferings();
         const pkgs = offerings.current?.availablePackages ?? [];
-        setPkg(pkgs.find((p) => p.product.identifier.startsWith(LIFETIME_PRODUCT_ID)) ?? offerings.current?.lifetime ?? null);
+        setPkg(pkgs.find((p) => p.product.identifier.startsWith(MONTHLY_PRODUCT_ID)) ?? offerings.current?.monthly ?? null);
       } catch (e) {
         // オフラインでも、前回の購入情報は SDK のキャッシュから getCustomerInfo で返る
         console.warn('purchases init failed', e);
@@ -70,8 +69,7 @@ export function PremiumProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const purchased = hasEntitlement(info);
-  const unlimited = purchased || settings.grandfathered;
+  const adFree = hasEntitlement(info);
 
   const purchase = useCallback(async (): Promise<PurchaseResult> => {
     if (!configured || !pkg) return 'unavailable';
@@ -98,34 +96,24 @@ export function PremiumProvider({ children }: { children: ReactNode }) {
     }
   }, [configured]);
 
-  const addTicket = useCallback(() => {
-    if (settings.tickets >= MAX_TICKETS) return false;
-    return changeTickets(1, MAX_TICKETS);
-  }, [settings.tickets, changeTickets]);
-
-  const spendTicket = useCallback(() => changeTickets(-1, MAX_TICKETS), [changeTickets]);
-
-  const requiresTicket = useCallback(
-    (r: Pick<Roulette, 'biasEnabled' | 'items'>) => !unlimited && needsPremium(r),
-    [unlimited],
-  );
+  const addTicket = useCallback(() => changeTickets(1), [changeTickets]);
+  const spendTicket = useCallback(() => changeTickets(-1), [changeTickets]);
+  const requiresTicket = useCallback((r: Pick<Roulette, 'biasEnabled' | 'items'>) => needsPremium(r), []);
 
   const value = useMemo<Premium>(
     () => ({
-      purchased,
-      unlimited,
-      grandfathered: settings.grandfathered,
+      adFree,
       tickets: settings.tickets,
-      maxTickets: MAX_TICKETS,
       price: pkg?.product.priceString ?? FALLBACK_PRICE,
       storeReady: configured && !!pkg,
+      managementUrl: info?.managementURL ?? null,
       purchase,
       restore,
       addTicket,
       spendTicket,
       requiresTicket,
     }),
-    [purchased, unlimited, settings.grandfathered, settings.tickets, pkg, configured, purchase, restore, addTicket, spendTicket, requiresTicket],
+    [adFree, settings.tickets, pkg, configured, info, purchase, restore, addTicket, spendTicket, requiresTicket],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
