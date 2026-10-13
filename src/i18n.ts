@@ -6,6 +6,7 @@ import { getLocales } from 'expo-localization';
  */
 const ja = {
   appName: '偏りルーレット',
+  appNamePlain: 'ルーレット',
   tagline: '見た目は公平、中身はこっそり。',
   myRoulettes: 'マイルーレット',
   templates: 'テンプレートから作る',
@@ -65,6 +66,13 @@ const ja = {
   settings: '設定',
   sound: '効果音',
   haptics: '振動',
+  homeIcon: 'ホーム画面の表示',
+  homeIconDefault: 'いつもの',
+  homeIconPlain: '目立たない',
+  homeIconNoteAndroid:
+    '「目立たない」にすると、ホーム画面のアプリ名が「ルーレット」になり、アイコンから「偏」の字が消えます。反映に数秒かかります。ホーム画面に置いたアイコンは、置き直しが必要なことがあります。',
+  homeIconNoteIos: '「目立たない」にすると、アイコンから「偏」の字が消えます。iOS ではアプリ名は変えられず、切り替えるときに OS の通知が出ます。',
+  homeIconFailed: '切り替えられませんでした',
   theme: '盤面テーマ',
   themeLocked: '動画を見て 24 時間使う',
   themeUnlockedUntil: '{time} まで使えます',
@@ -143,6 +151,7 @@ type Dict = typeof ja;
 
 const en: Dict = {
   appName: 'Bias Roulette',
+  appNamePlain: 'Roulette',
   tagline: 'Looks fair. Secretly isn’t.',
   myRoulettes: 'My roulettes',
   templates: 'Start from a template',
@@ -202,6 +211,13 @@ const en: Dict = {
   settings: 'Settings',
   sound: 'Sound',
   haptics: 'Haptics',
+  homeIcon: 'Home screen',
+  homeIconDefault: 'Standard',
+  homeIconPlain: 'Low-key',
+  homeIconNoteAndroid:
+    'Low-key renames the app to “Roulette” on your home screen and uses a plain wheel icon. It may take a few seconds, and you may need to re-add the shortcut to your home screen.',
+  homeIconNoteIos: 'Low-key switches to a plain wheel icon. iOS does not allow changing the app name and shows a system notice when the icon changes.',
+  homeIconFailed: 'Could not switch',
   theme: 'Wheel theme',
   themeLocked: 'Watch a video to use for 24h',
   themeUnlockedUntil: 'Available until {time}',

@@ -1,0 +1,9 @@
+{
+  "name": "app-icon",
+  "version": "1.0.0",
+  "description": "ホーム画面のアプリ名・アイコンの切り替え（偏りルーレット専用）",
+  "main": "src/index.ts",
+  "license": "UNLICENSED",
+  "author": "SKart",
+  "homepage": "https://github.com/HirayamaMasaki"
+}

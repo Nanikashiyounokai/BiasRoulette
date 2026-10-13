@@ -2,7 +2,16 @@ import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
 import * as StoreReview from 'expo-store-review';
-import { Alert, Linking, Platform, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Alert, Image, Linking, Platform, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+
+import {
+  appIconAvailable,
+  appIconChangesName,
+  getAppIconVariant,
+  setAppIconVariant,
+  type AppIconVariant,
+} from '../../modules/app-icon/src';
 
 import { useAds } from '../ads/AdsProvider';
 import { REWARD_UNLOCK_MS } from '../ads/config';
@@ -93,6 +102,8 @@ export default function Settings() {
         </Row>
       </Card>
 
+      {appIconAvailable && <HomeIconSection />}
+
       <SectionTitle>{t('howTo')}</SectionTitle>
       <Card>
         <Text style={styles.body}>{t('howToBody')}</Text>
@@ -109,6 +120,71 @@ export default function Settings() {
         {t('version')} {Constants.expoConfig?.version} · © SKart
       </Text>
     </ScrollView>
+  );
+}
+
+const HOME_ICONS: { variant: AppIconVariant; label: 'homeIconDefault' | 'homeIconPlain'; name: string; image: number }[] = [
+  { variant: 'default', label: 'homeIconDefault', name: t('appName'), image: require('../../assets/icon.png') },
+  {
+    variant: 'plain',
+    label: 'homeIconPlain',
+    name: appIconChangesName ? t('appNamePlain') : t('appName'),
+    image: require('../../assets/icon-plain/icon.png'),
+  },
+];
+
+/** ホーム画面のアプリ名・アイコンを目立たない版に切り替える（裏設定を使う人向け） */
+function HomeIconSection() {
+  const [variant, setVariant] = useState<AppIconVariant | null>(null);
+
+  useEffect(() => {
+    getAppIconVariant()
+      .then(setVariant)
+      .catch(() => setVariant('default'));
+  }, []);
+
+  const select = async (next: AppIconVariant) => {
+    if (next === variant) return;
+    const prev = variant;
+    setVariant(next);
+    try {
+      await setAppIconVariant(next);
+    } catch {
+      setVariant(prev);
+      Alert.alert(t('homeIconFailed'));
+    }
+  };
+
+  return (
+    <>
+      <SectionTitle>{t('homeIcon')}</SectionTitle>
+      <Card style={{ gap: 12 }}>
+        <View style={styles.iconRow}>
+          {HOME_ICONS.map((o) => {
+            const selected = variant === o.variant;
+            return (
+              <Pressable
+                key={o.variant}
+                onPress={() => select(o.variant)}
+                style={[styles.iconOption, selected && styles.themeSelected]}
+                accessibilityRole="radio"
+                accessibilityState={{ selected }}
+                testID={`home-icon-${o.variant}`}
+              >
+                <Image source={o.image} style={styles.iconImage} />
+                <Text style={styles.iconAppName} numberOfLines={1}>
+                  {o.name}
+                </Text>
+                <Text style={styles.themeSub}>{t(o.label)}</Text>
+              </Pressable>
+            );
+          })}
+        </View>
+        <Text style={[styles.body, { fontSize: 12, color: colors.subText }]}>
+          {appIconChangesName ? t('homeIconNoteAndroid') : t('homeIconNoteIos')}
+        </Text>
+      </Card>
+    </>
   );
 }
 
@@ -144,6 +220,19 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   themeSelected: { borderColor: colors.primary },
+  iconRow: { flexDirection: 'row', gap: 10 },
+  iconOption: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderRadius: 16,
+    backgroundColor: colors.bg,
+    borderWidth: 2,
+    borderColor: 'transparent',
+    gap: 4,
+  },
+  iconImage: { width: 56, height: 56, borderRadius: 14 },
+  iconAppName: { fontSize: 13, color: colors.text },
   themeName: { fontSize: 14, fontWeight: 'bold', color: colors.text },
   themeSub: { fontSize: 11, color: colors.subText, textAlign: 'center' },
   row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },

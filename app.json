@@ -65,6 +65,7 @@
         }
       ],
       "./plugins/withAndroidGradleFixes",
+      "./plugins/withAppIconVariants",
       [
         "expo-tracking-transparency",
         {

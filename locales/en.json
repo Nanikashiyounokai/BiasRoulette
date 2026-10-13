@@ -4,6 +4,7 @@
     "NSUserTrackingUsageDescription": "This identifier is used to show ads that are more relevant to you."
   },
   "android": {
-    "app_name": "Bias Roulette"
+    "app_name": "Bias Roulette",
+    "app_name_plain": "Roulette"
   }
 }
