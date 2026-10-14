@@ -32,6 +32,13 @@
       "predictiveBackGestureEnabled": false,
       "blockedPermissions": [
         "android.permission.READ_PHONE_STATE"
+      ],
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK",
+        "com.google.android.gms.permission.AD_ID"
       ]
     },
     "web": {
@@ -88,6 +95,13 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "owner": "skart-inc",
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "47c70710-1a4b-4c0a-98d3-d59ac965911a"
+      }
     }
   }
 }
