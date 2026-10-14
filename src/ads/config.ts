@@ -33,7 +33,10 @@ const test: Units = {
   rewarded: TestIds.REWARDED,
 };
 
-export const adUnits: Units = __DEV__
+// 実機テスト用のリリースビルドは EXPO_PUBLIC_TEST_ADS=1 でテスト広告にする（自分の広告を押すと AdMob の規約違反になる）
+const useTestAds = __DEV__ || process.env.EXPO_PUBLIC_TEST_ADS === '1';
+
+export const adUnits: Units = useTestAds
   ? test
   : production[Platform.OS === 'ios' ? 'ios' : 'android'];
 
