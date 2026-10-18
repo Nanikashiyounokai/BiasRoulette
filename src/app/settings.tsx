@@ -4,12 +4,7 @@ import { router } from 'expo-router';
 import * as StoreReview from 'expo-store-review';
 import { Alert, Image, Linking, Platform, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 
-import {
-  appIconAvailable,
-  appIconChangesName,
-  setAppIconVariant,
-  type AppIconVariant,
-} from '../../modules/app-icon/src';
+import { appIconAvailable, setAppIconVariant, type AppIconVariant } from '../../modules/app-icon/src';
 
 import { useAds } from '../ads/AdsProvider';
 import { REWARD_UNLOCK_MS } from '../ads/config';
@@ -100,7 +95,7 @@ export default function Settings() {
         </Row>
       </Card>
 
-      {appIconAvailable && <HomeIconSection />}
+      <HomeIconSection />
 
       <SectionTitle>{t('howTo')}</SectionTitle>
       <Card>
@@ -123,15 +118,14 @@ export default function Settings() {
 
 const HOME_ICONS: { variant: AppIconVariant; label: 'homeIconDefault' | 'homeIconPlain'; name: string; image: number }[] = [
   { variant: 'default', label: 'homeIconDefault', name: t('appName'), image: require('../../assets/icon.png') },
-  {
-    variant: 'plain',
-    label: 'homeIconPlain',
-    name: appIconChangesName ? t('appNamePlain') : t('appName'),
-    image: require('../../assets/icon-plain/icon.png'),
-  },
+  { variant: 'plain', label: 'homeIconPlain', name: t('appNamePlain'), image: require('../../assets/icon-plain/icon.png') },
 ];
 
-/** ホーム画面のアプリ名・アイコンを目立たない版に切り替える（裏設定を使う人向け） */
+/**
+ * 目立たないモード（裏設定を使う人向け）。
+ * Android: ホーム画面の名前・アイコンとアプリ内の「偏り」を切り替える。
+ * iOS: アプリ内の「偏り」だけ（名前は変えられず、アイコンを変えると OS の通知でばれるため）
+ */
 function HomeIconSection() {
   const { settings, updateSettings } = useStore();
   const variant = settings.homeIcon;
@@ -139,7 +133,7 @@ function HomeIconSection() {
   const select = async (next: AppIconVariant) => {
     if (next === variant) return;
     try {
-      await setAppIconVariant(next);
+      if (appIconAvailable) await setAppIconVariant(next);
       updateSettings({ homeIcon: next });
     } catch {
       Alert.alert(t('homeIconFailed'));
@@ -148,7 +142,7 @@ function HomeIconSection() {
 
   return (
     <>
-      <SectionTitle>{t('homeIcon')}</SectionTitle>
+      <SectionTitle>{appIconAvailable ? t('homeIcon') : t('homeIconTitleIos')}</SectionTitle>
       <Card style={{ gap: 12 }}>
         <View style={styles.iconRow}>
           {HOME_ICONS.map((o) => {
@@ -162,7 +156,7 @@ function HomeIconSection() {
                 accessibilityState={{ selected }}
                 testID={`home-icon-${o.variant}`}
               >
-                <Image source={o.image} style={styles.iconImage} />
+                {appIconAvailable && <Image source={o.image} style={styles.iconImage} />}
                 <Text style={styles.iconAppName} numberOfLines={1}>
                   {o.name}
                 </Text>
@@ -172,7 +166,7 @@ function HomeIconSection() {
           })}
         </View>
         <Text style={[styles.body, { fontSize: 12, color: colors.subText }]}>
-          {appIconChangesName ? t('homeIconNoteAndroid') : t('homeIconNoteIos')}
+          {appIconAvailable ? t('homeIconNoteAndroid') : t('homeIconNoteIos')}
         </Text>
       </Card>
     </>

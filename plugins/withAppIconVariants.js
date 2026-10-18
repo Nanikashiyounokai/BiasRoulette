@@ -4,7 +4,6 @@ const {
   withAndroidManifest,
   withDangerousMod,
   withStringsXml,
-  withXcodeProject,
   AndroidConfig,
 } = require('expo/config-plugins');
 
@@ -15,12 +14,11 @@ const {
  * Android: MainActivity からランチャーの入口を外し、activity-alias を 2 つ置く。
  *   MainActivityDefault（有効・いつもの名前とアイコン）／MainActivityPlain（無効・目立たない版）
  *   名前は locales/*.json の android.app_name_plain（無い言語は既定の「ルーレット」）
- * iOS: アセットカタログに代替アイコン AppIconPlain を足す。名前は変えられない
+ * iOS は対象外（名前は変えられず、アイコンを変えると OS の通知が出て人前でばれる）。アプリ内の表示だけ切り替える
  *
  * 画像は assets/icon-plain/generate.py で作る。
  */
 const SRC = 'assets/icon-plain';
-const IOS_ICON = 'AppIconPlain';
 const DEFAULT_PLAIN_NAME = 'ルーレット';
 
 // 108dp の前景（アダプティブ）と 48dp の旧形式
@@ -112,53 +110,9 @@ function withAndroidIconFiles(config) {
   ]);
 }
 
-function withIosIconFiles(config) {
-  return withDangerousMod(config, [
-    'ios',
-    async (c) => {
-      const dir = path.join(
-        c.modRequest.platformProjectRoot,
-        c.modRequest.projectName,
-        'Images.xcassets',
-        `${IOS_ICON}.appiconset`,
-      );
-      fs.mkdirSync(dir, { recursive: true });
-      fs.copyFileSync(path.join(c.modRequest.projectRoot, SRC, 'icon.png'), path.join(dir, 'icon-1024.png'));
-      fs.writeFileSync(
-        path.join(dir, 'Contents.json'),
-        JSON.stringify(
-          {
-            images: [{ filename: 'icon-1024.png', idiom: 'universal', platform: 'ios', size: '1024x1024' }],
-            info: { version: 1, author: 'expo' },
-          },
-          null,
-          2,
-        ),
-      );
-      return c;
-    },
-  ]);
-}
-
-function withIosBuildSetting(config) {
-  return withXcodeProject(config, (c) => {
-    const configs = c.modResults.pbxXCBuildConfigurationSection();
-    for (const key of Object.keys(configs)) {
-      const settings = configs[key].buildSettings;
-      // アプリ本体のターゲットだけ（ASSETCATALOG_COMPILER_APPICON_NAME を持つもの）
-      if (settings?.ASSETCATALOG_COMPILER_APPICON_NAME) {
-        settings.ASSETCATALOG_COMPILER_ALTERNATE_APP_ICON_NAMES = IOS_ICON;
-      }
-    }
-    return c;
-  });
-}
-
 module.exports = function withAppIconVariants(config) {
   config = withAndroidAliases(config);
   config = withPlainName(config);
   config = withAndroidIconFiles(config);
-  config = withIosIconFiles(config);
-  config = withIosBuildSetting(config);
   return config;
 };

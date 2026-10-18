@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { getAppIconVariant } from '../../modules/app-icon/src';
+import { appIconAvailable, getAppIconVariant } from '../../modules/app-icon/src';
 import { AdsProvider } from '../ads/AdsProvider';
 import { useBranding } from '../branding';
 import { t } from '../i18n';
@@ -33,7 +33,7 @@ function AppStack() {
 
   // ホーム画面の表示の正本は OS 側。再インストールや OS の都合でずれたら、OS に合わせる
   useEffect(() => {
-    if (!ready) return;
+    if (!ready || !appIconAvailable) return;
     getAppIconVariant()
       .then((v) => {
         if (v !== settings.homeIcon) updateSettings({ homeIcon: v });

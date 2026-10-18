@@ -71,9 +71,11 @@ const ja = {
   homeIcon: 'ホーム画面の表示',
   homeIconDefault: 'いつもの',
   homeIconPlain: '目立たない',
+  homeIconTitleIos: 'アプリ内の表示',
   homeIconNoteAndroid:
-    '「目立たない」にすると、ホーム画面のアプリ名が「ルーレット」になり、アイコンから「偏」の字が消えます。反映に数秒かかります。ホーム画面に置いたアイコンは、置き直しが必要なことがあります。',
-  homeIconNoteIos: '「目立たない」にすると、アイコンから「偏」の字が消えます。iOS ではアプリ名は変えられず、切り替えるときに OS の通知が出ます。',
+    '「目立たない」にすると、ホーム画面のアプリ名とアイコンを変えられます！\n・アプリ名が「ルーレット」になります\n・アイコンから「偏」の字が消えます\n・アプリ内の「偏り」の表示も消えます\n反映に数秒かかります。ホーム画面に置いたアイコンは、置き直しが必要なことがあります。',
+  homeIconNoteIos:
+    'iOS ではアプリ名やアイコンは変えられませんが、「目立たない」にするとアプリ内の「偏り」の表示が消えます。\n・見出しが「ルーレット」になります\n・シェア画像とシェア文からも「偏り」が消えます',
   homeIconFailed: '切り替えられませんでした',
   theme: '盤面テーマ',
   themeLocked: '動画を見て 24 時間使う',
@@ -218,9 +220,11 @@ const en: Dict = {
   homeIcon: 'Home screen',
   homeIconDefault: 'Standard',
   homeIconPlain: 'Low-key',
+  homeIconTitleIos: 'In-app display',
   homeIconNoteAndroid:
-    'Low-key renames the app to “Roulette” on your home screen and uses a plain wheel icon. It may take a few seconds, and you may need to re-add the shortcut to your home screen.',
-  homeIconNoteIos: 'Low-key switches to a plain wheel icon. iOS does not allow changing the app name and shows a system notice when the icon changes.',
+    'Low-key changes the app name and icon on your home screen!\n• The app name becomes “Roulette”\n• The icon becomes a plain wheel\n• “Bias” disappears inside the app too\nIt may take a few seconds, and you may need to re-add the shortcut to your home screen.',
+  homeIconNoteIos:
+    'iOS does not allow changing the app name or icon, but Low-key removes “Bias” inside the app.\n• The title becomes “Roulette”\n• Shared images and text no longer say “Bias”',
   homeIconFailed: 'Could not switch',
   theme: 'Wheel theme',
   themeLocked: 'Watch a video to use for 24h',

@@ -11,9 +11,11 @@ type Native = {
 // Expo Go や古い開発ビルドには入っていないので、無いときは機能ごと隠す
 const native = requireOptionalNativeModule<Native>('AppIcon');
 
-export const appIconAvailable = !!native && (Platform.OS === 'android' || Platform.OS === 'ios');
-/** Android は名前も変わる。iOS はアイコンだけ */
-export const appIconChangesName = Platform.OS === 'android';
+/**
+ * ホーム画面の名前・アイコンを変えられるのは Android だけ。
+ * iOS は名前を変えられず、アイコンを変えると OS の通知が出て人前でばれるので、使わない（10/18 決定）
+ */
+export const appIconAvailable = !!native && Platform.OS === 'android';
 
 export async function getAppIconVariant(): Promise<AppIconVariant> {
   return native ? native.getVariant() : 'default';
