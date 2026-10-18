@@ -2,13 +2,11 @@ import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
 import * as StoreReview from 'expo-store-review';
-import { useEffect, useState } from 'react';
 import { Alert, Image, Linking, Platform, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 
 import {
   appIconAvailable,
   appIconChangesName,
-  getAppIconVariant,
   setAppIconVariant,
   type AppIconVariant,
 } from '../../modules/app-icon/src';
@@ -135,22 +133,15 @@ const HOME_ICONS: { variant: AppIconVariant; label: 'homeIconDefault' | 'homeIco
 
 /** ホーム画面のアプリ名・アイコンを目立たない版に切り替える（裏設定を使う人向け） */
 function HomeIconSection() {
-  const [variant, setVariant] = useState<AppIconVariant | null>(null);
-
-  useEffect(() => {
-    getAppIconVariant()
-      .then(setVariant)
-      .catch(() => setVariant('default'));
-  }, []);
+  const { settings, updateSettings } = useStore();
+  const variant = settings.homeIcon;
 
   const select = async (next: AppIconVariant) => {
     if (next === variant) return;
-    const prev = variant;
-    setVariant(next);
     try {
       await setAppIconVariant(next);
+      updateSettings({ homeIcon: next });
     } catch {
-      setVariant(prev);
       Alert.alert(t('homeIconFailed'));
     }
   };

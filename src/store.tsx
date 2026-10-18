@@ -33,6 +33,11 @@ export type Settings = {
   tickets: number;
   /** 見終えたコーチマーク（画面 ID → true） */
   coachSeen: Record<string, boolean>;
+  /**
+   * ホーム画面の表示。plain（目立たない版）のときは、アプリ内からも「偏り」の語を消す。
+   * 正本は OS 側（Android の activity-alias / iOS の代替アイコン）。起動時に合わせ直す
+   */
+  homeIcon: 'default' | 'plain';
 };
 
 const defaultSettings: Settings = {
@@ -45,6 +50,7 @@ const defaultSettings: Settings = {
   ratioDisplay: 'percent',
   tickets: 0,
   coachSeen: {},
+  homeIcon: 'default',
 };
 
 type Store = {

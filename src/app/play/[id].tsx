@@ -15,6 +15,7 @@ import { Banner } from '../../ads/Banner';
 import { Wheel, itemColor } from '../../components/Wheel';
 import { Button } from '../../components/ui';
 import { draw, effectiveOdds, stopRotation, type Item } from '../../domain/roulette';
+import { useBranding } from '../../branding';
 import { t } from '../../i18n';
 import { usePremium } from '../../premium/PremiumProvider';
 import { useTicketGate } from '../../premium/useTicketGate';
@@ -34,6 +35,7 @@ export default function Play() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const roulette = useRoulette(id);
   const { upsert, markPlayed, settings, updateSettings } = useStore();
+  const branding = useBranding();
   const ads = useAds();
   const premium = usePremium();
   const gate = useTicketGate();
@@ -176,7 +178,7 @@ export default function Play() {
       const uri = await captureRef(shotRef, { format: 'png', quality: 1 });
       await Sharing.shareAsync(uri, {
         mimeType: 'image/png',
-        dialogTitle: t('shareText', { name: roulette.name, result: winner.name }),
+        dialogTitle: branding.shareText(roulette.name, winner.name),
       });
     } catch (e) {
       console.warn(e);
@@ -232,7 +234,7 @@ export default function Play() {
               </Animated.View>
             )}
           </View>
-          <Text style={styles.watermark}>{t('appName')}</Text>
+          <Text style={styles.watermark}>{branding.appName}</Text>
         </View>
 
         <View style={styles.controls}>

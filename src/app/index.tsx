@@ -8,6 +8,7 @@ import { CoachMarks } from '../components/CoachMarks';
 import { Wheel } from '../components/Wheel';
 import { Button, Card, SectionTitle } from '../components/ui';
 import { newId, type Roulette } from '../domain/roulette';
+import { useBranding } from '../branding';
 import { t } from '../i18n';
 import { usePremium } from '../premium/PremiumProvider';
 import { useTicketGate } from '../premium/useTicketGate';
@@ -18,6 +19,7 @@ import { useWheelPalette } from '../useWheelPalette';
 
 export default function Home() {
   const { ready, roulettes, migratedCount, remove, upsert } = useStore();
+  const branding = useBranding();
   const palette = useWheelPalette();
   const premium = usePremium();
   const gate = useTicketGate();
@@ -81,8 +83,8 @@ export default function Home() {
           showPointer={false}
         />
         <View style={{ flex: 1 }}>
-          <Text style={styles.heroTitle}>{t('appName')}</Text>
-          <Text style={styles.heroSub}>{t('tagline')}</Text>
+          <Text style={styles.heroTitle}>{branding.appName}</Text>
+          <Text style={styles.heroSub}>{branding.tagline}</Text>
         </View>
       </View>
       <View ref={newRef} collapsable={false}>
