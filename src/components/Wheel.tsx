@@ -11,8 +11,6 @@ type Props = {
   palette: string[];
   size: number;
   rotation?: SharedValue<number>;
-  /** 除外済み（当たった項目を外すモード）の項目を薄く表示する */
-  excludedIds?: Set<string>;
   showPointer?: boolean;
 };
 
@@ -40,7 +38,7 @@ export function itemColor(items: Item[], index: number, palette: string[]): stri
 }
 
 /** 盤面だけ（回転するのはここ） */
-const Face = memo(function Face({ items, palette, size, excludedIds }: Omit<Props, 'rotation' | 'showPointer'>) {
+const Face = memo(function Face({ items, palette, size }: Omit<Props, 'rotation' | 'showPointer'>) {
   const cx = size / 2;
   const cy = size / 2;
   const r = size / 2 - 2;
@@ -53,7 +51,6 @@ const Face = memo(function Face({ items, palette, size, excludedIds }: Omit<Prop
       {items.map((it, i) => {
         const { start, end } = slices[i];
         const color = itemColor(items, i, palette);
-        const excluded = excludedIds?.has(it.id);
         const mid = (start + end) / 2;
         const label = point(cx, cy, r * 0.6, mid);
         // 一覧のサムネイルなど小さい盤面では文字を出さない（潰れて読めない）
@@ -61,7 +58,7 @@ const Face = memo(function Face({ items, palette, size, excludedIds }: Omit<Prop
         // 左半分（6 時〜12 時）の文字は逆さまにならないよう 180° 返す
         const textAngle = mid > 180 ? mid + 90 : mid - 90;
         return (
-          <G key={it.id} opacity={excluded ? 0.25 : 1}>
+          <G key={it.id}>
             <Path d={slicePath(cx, cy, r, start, end)} fill={color} stroke="#FFFFFF" strokeWidth={1.5} />
             {showLabel && (
               <SvgText
@@ -89,7 +86,7 @@ const Face = memo(function Face({ items, palette, size, excludedIds }: Omit<Prop
  * ルーレット本体。針は 12 時方向に固定で、盤面を回す。
  * 旧版は針の画像と盤面の画像が離れて配置されていて、端末によっては針が盤面に届いていなかった。
  */
-export function Wheel({ items, palette, size, rotation, excludedIds, showPointer = true }: Props) {
+export function Wheel({ items, palette, size, rotation, showPointer = true }: Props) {
   const style = useAnimatedStyle(() => ({
     transform: [{ rotate: `${rotation ? rotation.value : 0}deg` }],
   }));
@@ -97,7 +94,7 @@ export function Wheel({ items, palette, size, rotation, excludedIds, showPointer
   return (
     <View style={{ width: size, height: size + (showPointer ? pw * 0.6 : 0) }}>
       <Animated.View style={[{ position: 'absolute', top: showPointer ? pw * 0.6 : 0 }, style]}>
-        <Face items={items} palette={palette} size={size} excludedIds={excludedIds} />
+        <Face items={items} palette={palette} size={size} />
       </Animated.View>
       {showPointer && (
         <Svg width={size} height={pw * 1.8} style={{ position: 'absolute', top: 0 }}>

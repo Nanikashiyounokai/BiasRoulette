@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { appIconAvailable, getAppIconVariant } from '../../modules/app-icon/src';
 import { AdsProvider } from '../ads/AdsProvider';
+import { DialogHost } from '../components/Dialog';
 import { useBranding } from '../branding';
 import { t } from '../i18n';
 import { PremiumProvider } from '../premium/PremiumProvider';
@@ -20,6 +21,7 @@ export default function RootLayout() {
           {/* 旧版はステータスバーの文字が白で、白背景に溶けて見えなかった */}
           <StatusBar style="dark" />
           <AppStack />
+          <DialogHost />
         </AdsProvider>
         </PremiumProvider>
       </StoreProvider>

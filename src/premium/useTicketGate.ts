@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Alert } from 'react-native';
+import { Dialog } from '../components/Dialog';
 
 import { useAds } from '../ads/AdsProvider';
 import { FREE_MAX_EVEN_ITEMS, PREMIUM_HIGH_PCT, PREMIUM_LOW_PCT, type Roulette } from '../domain/roulette';
@@ -21,7 +21,7 @@ export function useTicketGate() {
   const earnTicket = useCallback(async () => {
     const earned = await ads.showRewarded();
     if (!earned) {
-      Alert.alert(t('rewardFailed'));
+      Dialog.alert(t('rewardFailed'));
       return false;
     }
     return premium.addTicket();
@@ -30,7 +30,7 @@ export function useTicketGate() {
   /** チケットの案内を出す。広告を見てチケットを得たら onReady を呼ぶ */
   const prompt = useCallback(
     (onReady?: () => void, onCancel?: () => void) =>
-      Alert.alert(
+      Dialog.alert(
         t('ticketNeededTitle'),
         t('ticketNeededBody', { low: PREMIUM_LOW_PCT, high: PREMIUM_HIGH_PCT, n: FREE_MAX_EVEN_ITEMS + 1 }),
         [
@@ -43,7 +43,7 @@ export function useTicketGate() {
             },
           },
         ],
-        { cancelable: true, onDismiss: onCancel },
+        { onDismiss: onCancel },
       ),
     [earnTicket],
   );

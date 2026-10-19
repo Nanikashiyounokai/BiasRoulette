@@ -2,7 +2,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useMemo, useRef, useState } from 'react';
 import {
-  Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -14,7 +13,9 @@ import {
   View,
 } from 'react-native';
 
-import { CoachMarks } from '../components/CoachMarks';
+import { CoachHelpButton, CoachMarks } from '../components/CoachMarks';
+import { ModeIllustration, OddsIllustration, ToggleIllustration } from '../components/CoachIllustrations';
+import { Dialog } from '../components/Dialog';
 import { Wheel, itemColor } from '../components/Wheel';
 import { Button, Card, SectionTitle } from '../components/ui';
 import {
@@ -49,12 +50,16 @@ import { useWheelPalette } from '../useWheelPalette';
 type DraftItem = { id: string; name: string; weight: string; bias: string; biasTouched: boolean; color?: string };
 
 function toDraft(items: Item[]): DraftItem[] {
+  // 1 つでも裏比率が表比率と違えば、裏比率の列は全体で別に決めてあるものとして扱う。
+  // 項目ごとに見ると、ランチのテンプレート（表 1:1:1:1・裏 3:1:1:1）で同じ値の 3 つだけが
+  // ％変換のときに表比率（25%）へ追従してしまい、「本当」の合計が 125% になっていた
+  const touched = items.some((it) => it.bias !== it.weight);
   return items.map((it) => ({
     id: it.id,
     name: it.name,
     weight: String(it.weight),
     bias: String(it.bias),
-    biasTouched: it.bias !== it.weight,
+    biasTouched: touched,
     color: it.color,
   }));
 }
@@ -161,11 +166,6 @@ export default function Edit() {
     if (next === 'percent') setItems((prev) => toPercentDraft(prev));
   };
 
-  const fixTotals = () => {
-    setItems((prev) => toPercentDraft(prev));
-    setOddsDirty(true);
-  };
-
   const patch = (itemId: string, p: Partial<DraftItem>) =>
     setItems((prev) =>
       prev.map((d) => {
@@ -182,12 +182,16 @@ export default function Edit() {
 
   const addItem = () => {
     if (items.length >= MAX_ITEMS) {
-      Alert.alert(t('errMaxItems', { n: MAX_ITEMS }));
+      Dialog.alert(t('errMaxItems', { n: MAX_ITEMS }));
       return;
     }
     // ％表示で「1」を足すと 1% の項目になってしまうので、今の平均くらいの値で足す
     const v = mode === 'percent' ? String(Math.max(1, Math.round(100 / (items.length + 1)))) : '1';
-    setItems((prev) => [...prev, { id: newId(), name: '', weight: v, bias: v, biasTouched: false }]);
+    // 名前は空にせず「項目3」のように入れておく（そのまま保存でき、盤面にも「?」が出ない）
+    let n = items.length + 1;
+    while (items.some((d) => d.name.trim() === t('newItemName', { n }))) n++;
+    const name = t('newItemName', { n });
+    setItems((prev) => [...prev, { id: newId(), name, weight: v, bias: v, biasTouched: biasCustomized }]);
     setOddsDirty(true);
   };
 
@@ -221,7 +225,7 @@ export default function Edit() {
     const others = roulettes.filter((x) => x.id !== r.id).map((x) => x.name);
     const err = validate(r, others);
     if (err) {
-      Alert.alert(errorMessage(err));
+      Dialog.alert(errorMessage(err));
       return;
     }
     if (mode === 'percent' && !keepOriginalOdds && !totalsOk) {
@@ -229,7 +233,7 @@ export default function Edit() {
       const w = toPercentInts(r.items.map((it) => it.weight));
       const b = toPercentInts(r.items.map((it) => it.bias));
       const fixed: Roulette = { ...r, items: r.items.map((it, i) => ({ ...it, weight: w[i], bias: b[i] })) };
-      Alert.alert(t('totalNot100Title'), t('totalNot100Body'), [
+      Dialog.alert(t('totalNot100Title'), t('totalNot100Body'), [
         { text: t('cancel'), style: 'cancel' },
         { text: t('fixAndSave'), onPress: () => commit(fixed) },
       ]);
@@ -259,15 +263,19 @@ export default function Edit() {
         options={{
           title: isNew ? t('editorNewTitle') : t('editorEditTitle'),
           headerRight: () => (
-            <Pressable hitSlop={12} onPress={save} testID="save">
-              <Text style={{ color: colors.primary, fontWeight: 'bold', fontSize: 17 }}>{t('save')}</Text>
-            </Pressable>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+              <CoachHelpButton id="edit" />
+              <Pressable hitSlop={12} onPress={save} testID="save">
+                <Text style={{ color: colors.primary, fontWeight: 'bold', fontSize: 17 }}>{t('save')}</Text>
+              </Pressable>
+            </View>
           ),
         }}
       />
       <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 48 + insets.bottom }} keyboardShouldPersistTaps="handled">
         <View style={{ alignItems: 'center', marginBottom: 8 }}>
           <Wheel items={previewItems} palette={palette} size={180} showPointer={false} />
+          <Text style={styles.previewNote}>{t('wheelPreviewNote')}</Text>
         </View>
 
         <SectionTitle>{t('rouletteName')}</SectionTitle>
@@ -391,11 +399,6 @@ export default function Edit() {
                 {t('actual')} {t('total', { n: biasTotal })}
               </Text>
             )}
-            {!totalsOk && (
-              <Pressable onPress={fixTotals} hitSlop={8} testID="fix-total">
-                <Text style={styles.fixTotal}>{t('fixTotal')}</Text>
-              </Pressable>
-            )}
           </View>
         )}
 
@@ -452,7 +455,7 @@ export default function Edit() {
                 title={t('earnTicket')}
                 variant="secondary"
                 onPress={async () => {
-                  if (await gate.earnTicket()) Alert.alert(t('ticketEarned', { n: premium.tickets + 1 }));
+                  if (await gate.earnTicket()) Dialog.alert(t('ticketEarned', { n: premium.tickets + 1 }));
                 }}
                 style={{ flexGrow: 1 }}
               />
@@ -465,10 +468,10 @@ export default function Edit() {
       <CoachMarks
         id="edit"
         steps={[
-          { target: modeRef, title: t('coachModeTitle'), body: t('coachModeBody') },
-          { target: lockRef, title: t('coachLockTitle'), body: t('coachLockBody') },
+          { target: modeRef, title: t('coachModeTitle'), body: t('coachModeBody'), illustration: <ModeIllustration /> },
+          { target: lockRef, title: t('coachLockTitle'), body: t('coachLockBody'), illustration: <OddsIllustration /> },
           // プレイ画面では出さない（人前で回しているときに裏設定の説明が出ると、仕込みがばれる）
-          { title: t('coachToggleTitle'), body: t('coachToggleBody') },
+          { title: t('coachToggleTitle'), body: t('coachToggleBody'), illustration: <ToggleIllustration /> },
         ]}
       />
     </KeyboardAvoidingView>
@@ -500,7 +503,6 @@ const styles = StyleSheet.create({
   segmentTextActive: { color: colors.primaryText },
   totalRow: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 12, marginTop: 10, marginLeft: 40 },
   totalText: { fontSize: 13, fontWeight: 'bold', color: colors.subText },
-  fixTotal: { fontSize: 13, fontWeight: 'bold', color: colors.primary, textDecorationLine: 'underline' },
   lock: {
     width: 32,
     height: 32,
@@ -525,6 +527,7 @@ const styles = StyleSheet.create({
   remove: { width: 32, alignItems: 'center' },
   pct: { fontSize: 11, color: colors.secret, marginLeft: 40, marginTop: 2 },
   hint: { fontSize: 12, color: colors.subText, marginTop: 2 },
+  previewNote: { fontSize: 11, color: colors.subText, marginTop: 6, textAlign: 'center' },
   colorRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginLeft: 40, marginTop: 8 },
   colorChip: { width: 28, height: 28, borderRadius: 14 },
   colorChipActive: { borderWidth: 3, borderColor: colors.primaryText },

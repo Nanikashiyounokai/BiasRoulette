@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Alert, Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Dialog } from '../components/Dialog';
 import { Button, Card, SectionTitle } from '../components/ui';
 import { FREE_MAX_EVEN_ITEMS, PREMIUM_HIGH_PCT, PREMIUM_LOW_PCT } from '../domain/roulette';
 import { t } from '../i18n';
@@ -22,16 +23,16 @@ export default function Premium() {
 
   const buy = async () => {
     const result = await premium.purchase();
-    if (result === 'purchased') Alert.alert(t('purchased'));
-    else if (result === 'failed' || result === 'unavailable') Alert.alert(t('purchaseFailed'));
+    if (result === 'purchased') Dialog.alert(t('purchased'));
+    else if (result === 'failed' || result === 'unavailable') Dialog.alert(t('purchaseFailed'));
   };
 
   const restore = async () => {
-    Alert.alert((await premium.restore()) ? t('restored') : t('restoreNone'));
+    Dialog.alert((await premium.restore()) ? t('restored') : t('restoreNone'));
   };
 
   const earn = async () => {
-    if (await gate.earnTicket()) Alert.alert(t('ticketEarned', { n: premium.tickets + 1 }));
+    if (await gate.earnTicket()) Dialog.alert(t('ticketEarned', { n: premium.tickets + 1 }));
   };
 
   return (

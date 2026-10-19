@@ -73,6 +73,13 @@ export default function Play() {
   const size = Math.min(width - 48, height * 0.42, 420);
   const remaining = roulette.items.filter((it) => !excluded.has(it.id));
   const roundDone = roulette.removeWinners && remaining.length === 0;
+  // 当たった項目は盤面から外し、残りの項目だけで円を分け直す（薄く残すと、どれが残っているか分かりにくかった）。
+  // 結果を見ている間は当たった項目を針の下に残し、次に回すときに外す
+  const shown = roulette.removeWinners
+    ? roulette.items.filter((it) => !excluded.has(it.id) || (phase === 'result' && it.id === winner?.id))
+    : roulette.items;
+  // 外しても色が変わらないよう、元の並びで決まる色を持たせておく
+  const shownItems = shown.map((it) => ({ ...it, color: itemColor(roulette.items, roulette.items.indexOf(it), palette) }));
 
   const finish = () => {
     const p = pending.current;
@@ -137,7 +144,8 @@ export default function Play() {
     if (index < 0) index = draw(roulette.items.map((it) => (pool.includes(it) ? it.weight : 0)));
     if (index < 0) return;
 
-    const target = stopRotation(roulette.items, index, rotation.value, 8);
+    // 回している間の盤面は pool だけで描かれる
+    const target = stopRotation(pool, pool.indexOf(roulette.items[index]), rotation.value, 8);
     pending.current = { index, target };
     setWinner(null);
     setPhase('spinning');
@@ -219,7 +227,7 @@ export default function Play() {
       />
       <ScrollView contentContainerStyle={{ alignItems: 'center', padding: 16, paddingBottom: 24 }}>
         <View ref={shotRef} collapsable={false} style={styles.shot}>
-          <Wheel items={roulette.items} palette={palette} size={size} rotation={rotation} excludedIds={excluded} />
+          <Wheel items={shownItems} palette={palette} size={size} rotation={rotation} />
           <View style={styles.resultArea}>
             {phase === 'spinning' && <Text style={styles.spinning}>{t('spinning')}</Text>}
             {phase === 'result' && winner && (

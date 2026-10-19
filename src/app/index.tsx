@@ -1,10 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router, Stack } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { Alert, FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { Banner } from '../ads/Banner';
-import { CoachMarks } from '../components/CoachMarks';
+import { CoachHelpButton, CoachMarks } from '../components/CoachMarks';
+import { OddsIllustration, TicketIllustration } from '../components/CoachIllustrations';
+import { Dialog } from '../components/Dialog';
 import { Wheel } from '../components/Wheel';
 import { Button, Card, SectionTitle } from '../components/ui';
 import { newId, type Roulette } from '../domain/roulette';
@@ -40,7 +42,7 @@ export default function Home() {
   );
 
   const openMenu = (r: Roulette) =>
-    Alert.alert(r.name, undefined, [
+    Dialog.alert(r.name, undefined, [
       { text: t('edit'), onPress: () => router.push({ pathname: '/edit', params: { id: r.id } }) },
       {
         text: t('duplicate'),
@@ -60,7 +62,7 @@ export default function Home() {
         text: t('delete'),
         style: 'destructive',
         onPress: () =>
-          Alert.alert(t('deleteConfirmTitle'), t('deleteConfirmBody', { name: r.name }), [
+          Dialog.alert(t('deleteConfirmTitle'), t('deleteConfirmBody', { name: r.name }), [
             { text: t('cancel'), style: 'cancel' },
             { text: t('delete'), style: 'destructive', onPress: () => remove(r.id) },
           ]),
@@ -130,6 +132,7 @@ export default function Home() {
         options={{
           headerRight: () => (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
+              <CoachHelpButton id="home" />
               <Pressable
                   ref={ticketRef}
                   hitSlop={8}
@@ -193,8 +196,13 @@ export default function Home() {
         steps={[
           { target: newRef, title: t('coachNewTitle'), body: t('coachNewBody') },
           { target: tplRef, title: t('coachTplTitle'), body: t('coachTplBody') },
-          { target: ticketRef, title: t('coachTicketTitle'), body: t('coachTicketBody') },
-          { title: t('coachSecretTitle'), body: t('coachSecretBody') },
+          {
+            target: ticketRef,
+            title: t('coachTicketTitle'),
+            body: t('coachTicketBody'),
+            illustration: <TicketIllustration />,
+          },
+          { title: t('coachSecretTitle'), body: t('coachSecretBody'), illustration: <OddsIllustration /> },
         ]}
       />
     </View>

@@ -1,4 +1,5 @@
-import { useEffect, useState, type RefObject } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { useEffect, useState, type ReactNode, type RefObject } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View, useWindowDimensions, type View as RNView } from 'react-native';
 
 import { t } from '../i18n';
@@ -10,6 +11,8 @@ export type CoachStep = {
   target?: RefObject<RNView | null>;
   title: string;
   body: string;
+  /** 文章だけでは分かりにくいところに添える図（CoachIllustrations.tsx） */
+  illustration?: ReactNode;
 };
 
 type Rect = { x: number; y: number; width: number; height: number };
@@ -18,7 +21,8 @@ const PAD = 6;
 
 /**
  * 初めて開いた画面で、部品を 1 つずつ光らせて使い方を見せる（コーチマーク）。
- * 画面ごとに 1 回だけ。見終えたかどうかは settings.coachSeen に残す。
+ * 自動で出すのは画面ごとに 1 回だけ。見終えたかどうかは settings.coachSeen に残す。
+ * ヘッダーの「？」（CoachHelpButton）で coachSeen を戻すと、最初からもう一度出る。
  *
  * 部品の位置は measureInWindow で測る。画面の描画が落ち着いてから測るため、少し待ってから出す。
  */
@@ -29,6 +33,8 @@ export function CoachMarks({ id, steps, enabled = true }: { id: string; steps: C
   const [visible, setVisible] = useState(false);
 
   const seen = !!settings.coachSeen?.[id];
+  // 測った位置は「どのステップの位置か」と組で持つ。ステップが変わった直後は前の位置を使わない
+  const [measured, setMeasured] = useState<{ index: number; rect: Rect | null } | null>(null);
 
   useEffect(() => {
     if (!ready || seen || !enabled) return;
@@ -38,8 +44,6 @@ export function CoachMarks({ id, steps, enabled = true }: { id: string; steps: C
 
   const step = steps[index];
 
-  // 測った位置は「どのステップの位置か」と組で持つ。ステップが変わった直後は前の位置を使わない
-  const [measured, setMeasured] = useState<{ index: number; rect: Rect | null } | null>(null);
   // steps は描画のたびに作り直される配列なので、依存には ref（useRef で同じ物）だけを入れる
   const target = step?.target;
   useEffect(() => {
@@ -63,6 +67,9 @@ export function CoachMarks({ id, steps, enabled = true }: { id: string; steps: C
 
   const finish = () => {
     setVisible(false);
+    // 「？」で見直すときは 1 枚目から
+    setIndex(0);
+    setMeasured(null);
     updateSettings({ coachSeen: { ...settings.coachSeen, [id]: true } });
   };
 
@@ -104,6 +111,7 @@ export function CoachMarks({ id, steps, enabled = true }: { id: string; steps: C
             {index + 1} / {steps.length}
           </Text>
           <Text style={styles.title}>{step.title}</Text>
+          {step.illustration && <View style={styles.illustration}>{step.illustration}</View>}
           <Text style={styles.body}>{step.body}</Text>
           <View style={styles.actions}>
             {!last && (
@@ -121,7 +129,31 @@ export function CoachMarks({ id, steps, enabled = true }: { id: string; steps: C
   );
 }
 
+/** ヘッダーに置く「？」。押すとその画面の説明をもう一度最初から出す */
+export function CoachHelpButton({ id }: { id: string }) {
+  const { settings, updateSettings } = useStore();
+  return (
+    <Pressable
+      hitSlop={10}
+      onPress={() => updateSettings({ coachSeen: { ...settings.coachSeen, [id]: false } })}
+      accessibilityRole="button"
+      accessibilityLabel={t('coachHelp')}
+      testID={`coach-help-${id}`}
+    >
+      <Ionicons name="help-circle-outline" size={25} color={colors.primaryText} />
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
+  illustration: {
+    alignItems: 'center',
+    backgroundColor: colors.bg,
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    marginVertical: 4,
+  },
   dim: { position: 'absolute', backgroundColor: 'rgba(28,18,10,0.72)' },
   ring: { position: 'absolute', borderRadius: 6, borderWidth: 2, borderColor: colors.primarySoft },
   card: {

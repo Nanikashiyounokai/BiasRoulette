@@ -2,13 +2,14 @@ import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
 import * as StoreReview from 'expo-store-review';
-import { Alert, Image, Linking, Platform, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Image, Linking, Platform, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 
 import { appIconAvailable, setAppIconVariant, type AppIconVariant } from '../../modules/app-icon/src';
 
 import { useAds } from '../ads/AdsProvider';
 import { REWARD_UNLOCK_MS } from '../ads/config';
 import { Wheel } from '../components/Wheel';
+import { Dialog } from '../components/Dialog';
 import { Card, SectionTitle } from '../components/ui';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -38,7 +39,7 @@ export default function Settings() {
     }
     const earned = await ads.showRewarded();
     if (!earned) {
-      if (!ads.rewardedAvailable) Alert.alert(t('rewardFailed'));
+      if (!ads.rewardedAvailable) Dialog.alert(t('rewardFailed'));
       return;
     }
     unlockTheme(id, REWARD_UNLOCK_MS);
@@ -136,7 +137,7 @@ function HomeIconSection() {
       if (appIconAvailable) await setAppIconVariant(next);
       updateSettings({ homeIcon: next });
     } catch {
-      Alert.alert(t('homeIconFailed'));
+      Dialog.alert(t('homeIconFailed'));
     }
   };
 
