@@ -1,6 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState, type ReactNode, type RefObject } from 'react';
-import { Modal, Pressable, StyleSheet, Text, View, useWindowDimensions, type View as RNView } from 'react-native';
+import {
+  Modal,
+  Platform,
+  Pressable,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
+  type View as RNView,
+} from 'react-native';
 
 import { t } from '../i18n';
 import { useStore } from '../store';
@@ -52,7 +62,10 @@ export function CoachMarks({ id, steps, enabled = true }: { id: string; steps: C
       const node = target.current;
       // 部品が見つからなければ、中央に説明だけ出す（止まったままにしない）
       if (!node) return setMeasured({ index, rect: null });
-      node.measureInWindow((x, y, w, h) => {
+      node.measureInWindow((x, rawY, w, h) => {
+        // Android の measureInWindow はステータスバーの下を 0 とした値を返すが、Modal は画面の一番上から描かれる。
+        // そのままだと光らせる枠がステータスバーの高さぶん上にずれる（2026-10-20 エミュレータで確認）
+        const y = rawY + (Platform.OS === 'android' ? (StatusBar.currentHeight ?? 0) : 0);
         setMeasured({
           index,
           rect: w > 0 && h > 0 ? { x: x - PAD, y: y - PAD, width: w + PAD * 2, height: h + PAD * 2 } : null,
