@@ -20,7 +20,9 @@
         "simulator": false
       }
     },
-    "production": {},
+    "production": {
+      "autoIncrement": true
+    },
     "testflight": {
       "distribution": "store",
       "env": {
@@ -32,7 +34,11 @@
   "submit": {
     "production": {
       "android": {
-        "track": "internal"
+        "track": "production",
+        "releaseStatus": "draft"
+      },
+      "ios": {
+        "ascAppId": "6450523479"
       }
     },
     "testflight": {
