@@ -22,7 +22,7 @@
     },
     "android": {
       "package": "com.skart.biasroulette",
-      "versionCode": 15,
+      "versionCode": 16,
       "adaptiveIcon": {
         "backgroundColor": "#FFFFFF",
         "foregroundImage": "./assets/android-icon-foreground.png",
