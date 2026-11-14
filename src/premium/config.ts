@@ -28,4 +28,4 @@ export const FALLBACK_PRICE = '¥300';
 
 /** サブスクリプションの画面に必ず載せるリンク（App Store 審査ガイドライン 3.1.2） */
 export const TERMS_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
-export const PRIVACY_URL = 'https://doc-hosting.flycricket.io/bias-roulette-privacy-policy/2d86e6b8-42a8-4c66-8b2d-dd9bd28bfd14/';
+export const PRIVACY_URL = 'https://doc-hosting.flycricket.io/bias-roulette-privacy-policy/2d86e6b8-42a8-4c66-8b2d-dd9bd28bfd14/privacy';
