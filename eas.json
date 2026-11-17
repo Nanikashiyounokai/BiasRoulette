@@ -1,0 +1,51 @@
+{
+  "cli": {
+    "version": ">= 16.0.0",
+    "appVersionSource": "local"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_TEST_ADS": "1"
+      },
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": false
+      }
+    },
+    "production": {
+      "autoIncrement": true
+    },
+    "testflight": {
+      "distribution": "store",
+      "env": {
+        "EXPO_PUBLIC_TEST_ADS": "1"
+      },
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "track": "production",
+        "releaseStatus": "draft",
+        "serviceAccountKeyPath": "/Users/hirayamamasaki/.secrets/bias-roulette-05cf49f061c3.json"
+      },
+      "ios": {
+        "ascAppId": "6450523479"
+      }
+    },
+    "testflight": {
+      "ios": {
+        "ascAppId": "6450523479"
+      }
+    }
+  }
+}
